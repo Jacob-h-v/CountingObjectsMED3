@@ -1,11 +1,13 @@
 # This file outlines the basics of how to code template matching
 # Source: Image Processing and Acquisition using Python - Second Edition, P240-241.
 
+# in order to work, this script requires the OpenCV and napari-skimage-regionprops libraries to be enabled in the environment.
+
 import cv2 as cv
 import numpy as np
 from PIL import Image
 from skimage.morphology import label
-from skimage.measaure import regionprops
+from skimage.measure import regionprops
 from skimage.feature import match_template
 
 # Here we import an image and convert it to grayscale
