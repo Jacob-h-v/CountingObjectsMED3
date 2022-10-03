@@ -1,0 +1,42 @@
+# This file outlines the basics of how to code template matching
+# Source: Image Processing and Acquisition using Python - Second Edition, P240-241.
+
+import cv2 as cv
+import numpy as np
+from PIL import Image
+from skimage.morphology import label
+from skimage.measaure import regionprops
+from skimage.feature import match_template
+
+# Here we import an image and convert it to grayscale
+inputImage = Image.open("ImageFileName.png")
+inputImage = inputImage.convert("L")
+# Here we convert the image to an ndarray.
+inputImage = np.asarray(inputImage)
+
+# Here we import the desired template image and convert it to grayscale
+templateImage = Image.open("TemplateFileName.png")
+templateImage = templateImage.convert("L")
+# Converting the template image to an ndarray:
+templateImage = np.asarray(templateImage)
+
+# Using built in functionality to perform template matching:
+comparison = match_template(inputImage, templateImage)
+thresh = 0.7
+
+# Thresholding the result from template matching considering pixel values where the normalized cross-correlation  is > 0.7.
+result = comparison > thresh
+
+# Labeling the thresholded image:
+c = label(result, background=0)
+
+# Performing regionprops to count the number of label:
+regprop = regionprops(c)
+print("Number of matches:", len(regprop))
+
+# Convert binary image to 8bit for storage:
+result = result*255
+
+# Convert ndarray back to Image:
+cv.imwrite("DesiredFilePath/OutputImageName.png, result")
+
