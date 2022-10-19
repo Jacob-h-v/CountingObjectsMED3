@@ -13,13 +13,13 @@ from skimage.feature import match_template
 # Here we import an image and convert it to grayscale
 inputImage = Image.open("ImageFileName.png")
 inputImage = inputImage.convert("L")
-# Here we convert the image to an ndarray.
+# Here we convert the image to a ndarray.
 inputImage = np.asarray(inputImage)
 
 # Here we import the desired template image and convert it to grayscale
 templateImage = Image.open("TemplateFileName.png")
 templateImage = templateImage.convert("L")
-# Converting the template image to an ndarray:
+# Converting the template image to a ndarray:
 templateImage = np.asarray(templateImage)
 
 # Using built in functionality to perform template matching:
