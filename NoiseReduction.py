@@ -1,4 +1,4 @@
-# Implementing a median filter to reduce noise. Specifically salt/pepper noise and spiky pixel values.
+# Implementing a median filter to reduce noise. Specifically salt/pepper noise and spiky pixel values..
 
 import cv2 as cv
 import numpy as np
