@@ -4,6 +4,7 @@ cropping = False
 showCropping = True
 x_start, y_start, x_end, y_end = 0, 0, 0, 0
 image = cv2.imread('Resources/input picture.jpg')
+imageTest = cv2.imread('Resources/template2.jpg')
 oriImage = image.copy()
 
 def mouse_crop(event, x, y, flags, param):
@@ -30,7 +31,10 @@ def mouse_crop(event, x, y, flags, param):
             cv2.imwrite('Output/CroppedPicture.jpg', roi)
             showCropping = False
 
-def template_cropping():
+def template_cropping(inputImage):
+    global image, oriImage
+    image = inputImage
+    oriImage = image.copy()
     cv2.namedWindow("image")
     cv2.setMouseCallback("image", mouse_crop)
 
@@ -45,4 +49,4 @@ def template_cropping():
     # close all open windows
     cv2.destroyAllWindows()
 
-template_cropping()
+template_cropping(imageTest)
