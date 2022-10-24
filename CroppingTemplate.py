@@ -1,14 +1,14 @@
 import cv2
 import numpy as np
 cropping = False
-showPicture = True
+showCropping = True
 x_start, y_start, x_end, y_end = 0, 0, 0, 0
 image = cv2.imread('Resources/input picture.jpg')
 oriImage = image.copy()
 
 def mouse_crop(event, x, y, flags, param):
     # grab references to the global variables
-    global x_start, y_start, x_end, y_end, cropping, showPicture
+    global x_start, y_start, x_end, y_end, cropping, showCropping
     # if the left mouse button was DOWN, start RECORDING
     # (x, y) coordinates and indicate that cropping is being
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -28,18 +28,21 @@ def mouse_crop(event, x, y, flags, param):
             roi = oriImage[refPoint[0][1]:refPoint[1][1], refPoint[0][0]:refPoint[1][0]]
             cv2.imshow("Cropped", roi)
             cv2.imwrite('Output/CroppedPicture.jpg', roi)
-            showPicture = False
+            showCropping = False
 
-cv2.namedWindow("image")
-cv2.setMouseCallback("image", mouse_crop)
+def template_cropping():
+    cv2.namedWindow("image")
+    cv2.setMouseCallback("image", mouse_crop)
 
-while showPicture:
-    i = image.copy()
-    if not cropping:
-        cv2.imshow("image", image)
-    elif cropping:
-        cv2.rectangle(i, (x_start, y_start), (x_end, y_end), (0, 0, 255), 2)
-        cv2.imshow("image", i)
-    cv2.waitKey(1)
-# close all open windows
-cv2.destroyAllWindows()
+    while showCropping:
+        i = image.copy()
+        if not cropping:
+            cv2.imshow("image", image)
+        elif cropping:
+            cv2.rectangle(i, (x_start, y_start), (x_end, y_end), (0, 0, 255), 2)
+            cv2.imshow("image", i)
+        cv2.waitKey(1)
+    # close all open windows
+    cv2.destroyAllWindows()
+
+template_cropping()
