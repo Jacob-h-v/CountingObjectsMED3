@@ -3,8 +3,8 @@ import numpy as np
 cropping = False
 showCropping = True
 x_start, y_start, x_end, y_end = 0, 0, 0, 0
-image = cv2.imread('Resources/input picture.jpg')
-imageTest = cv2.imread('Resources/template2.jpg')
+image = cv2.imread('Resources/1M-2L-1P-1CL-1C (1).png')
+imageTest = cv2.imread('Resources/1M-2L-1P-1CL-1C (1).png')
 oriImage = image.copy()
 
 def mouse_crop(event, x, y, flags, param):
@@ -29,7 +29,7 @@ def mouse_crop(event, x, y, flags, param):
             roi = oriImage[refPoint[0][1]:refPoint[1][1], refPoint[0][0]:refPoint[1][0]]
             cv2.imshow("Cropped", roi)
             cv2.imwrite('Output/CroppedPicture.jpg', roi)
-            showCropping = False
+            #showCropping = False
 
 def template_cropping(inputImage):
     global image, oriImage
@@ -48,5 +48,6 @@ def template_cropping(inputImage):
         cv2.waitKey(1)
     # close all open windows
     cv2.destroyAllWindows()
+
 
 template_cropping(imageTest)

@@ -9,7 +9,7 @@ from PIL import Image
 from skimage.morphology import label
 from skimage.measure import regionprops
 from skimage.feature import match_template
-
+import CroppingTemplate
 # Here we import an image and convert it to grayscale
 inputImage = Image.open("Resources/1M-2L-1P-1CL-1C (1).png")
 inputImage = inputImage.convert("L")
@@ -17,7 +17,7 @@ inputImage = inputImage.convert("L")
 inputImage = np.asarray(inputImage)
 
 # Here we import the desired template image and convert it to grayscale
-templateImage = Image.open("Resources/coinTemplate.png")
+templateImage = CroppingTemplate.template_cropping(inputImage)
 templateImage = templateImage.convert("L")
 # Converting the template image to a ndarray:
 templateImage = np.asarray(templateImage)
