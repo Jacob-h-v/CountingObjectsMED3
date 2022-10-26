@@ -3,7 +3,8 @@
 # Let's fix some version control.
 
 from NoiseReduction import *
-# from CroppingTemplate import *
+from CroppingTemplate import template_cropping
+from TemplateMatchingAutomated import TemplateMatching
 
 imageInput = cv.imread("Resources/input picture.jpg")
 imageInput_gray = cv.cvtColor(imageInput, cv.COLOR_BGR2GRAY)
@@ -15,11 +16,11 @@ matchTemplate = True
 erode = True
 dilate = True
 
-
-#def RunCroppingTemplate():
-
-    # Crop to relevant part of photo here and then crop to template later after cleaning up the photo?
-
+# Manual user cropping for finding initial template
+def RunTemplateCropping():
+    template_cropping(imageInput)
+    # template = cv.imread("Output/CroppedPicture.jpg")
+    # return template
 
 def RunNoiseReduction():
     nrInput = cv.imread("Output/CroppedPicture.jpg")
@@ -28,9 +29,14 @@ def RunNoiseReduction():
     nrOutput = median_filter(nrInput_arr, 3)
     return nrOutput
 
+def RunTemplateMatching():
+    TemplateMatching(inputPic_gray, noiseGone)
+    result = cv.imread("Output/TemplateMatched.png")
+    return result
 
-#if cropPicture:
-    #RunCroppingTemplate()
+
+if cropPicture:
+    RunTemplateCropping()
 
 if reduceNoise:
     RunNoiseReduction()
@@ -44,7 +50,11 @@ if reduceNoise:
 
     # run dilation from morphology script
 
+if matchTemplate:
+    RunTemplateMatching()
+    templateMatchingResult = RunTemplateMatching()
 
 cv.imshow("Filtered Image", noiseGone)
 cv.imshow("Input Image", imageInput)
+cv.imshow("TemplateMatched", templateMatchingResult)
 cv.waitKey(0)
