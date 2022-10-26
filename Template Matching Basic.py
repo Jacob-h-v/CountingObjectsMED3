@@ -11,13 +11,13 @@ from skimage.measure import regionprops
 from skimage.feature import match_template
 
 # Here we import an image and convert it to grayscale
-inputImage = Image.open("Resources/input picture.jpg")
+inputImage = Image.open("Resources/1M-2L-1P-1CL-1C (1).png")
 inputImage = inputImage.convert("L")
 # Here we convert the image to a ndarray.
 inputImage = np.asarray(inputImage)
 
 # Here we import the desired template image and convert it to grayscale
-templateImage = Image.open("Resources/template.jpg")
+templateImage = Image.open("Resources/coinTemplate.png")
 templateImage = templateImage.convert("L")
 # Converting the template image to a ndarray:
 templateImage = np.asarray(templateImage)
@@ -40,9 +40,11 @@ print("Number of matches:", len(regprop))
 result = result*255
 
 # Convert ndarray back to Image:
-cv.imwrite("Output/OutputImageName.png", result)
+output = cv.imwrite("Output/OutputImageName.jpg", result)
 
-cv.imshow("result", result)
+cv.imshow("Input Pic", inputImage)
+cv.imshow("Template", templateImage)
+cv.imshow("Output pic", output)
 
 cv.waitKey(0)
 

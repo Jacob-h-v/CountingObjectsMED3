@@ -4,9 +4,9 @@ import cv2 as cv
 import numpy as np
 from PIL import Image
 
-#inputPic = cv.imread("Resources/input picture.jpg")
-#inputPic_gray = cv.cvtColor(inputPic, cv.COLOR_BGR2GRAY)
-#inputPic_arr = np.array(inputPic_gray)
+inputPic = cv.imread("Resources/hamsta input.jpg")
+inputPic_gray = cv.cvtColor(inputPic, cv.COLOR_BGR2GRAY)
+inputPic_arr = np.array(inputPic_gray)
 
 def median_filter(data, filter_size):
     temp = []
@@ -33,9 +33,9 @@ def median_filter(data, filter_size):
             temp = []
     return data_final
 
-#filtered_img = median_filter(inputPic_arr, 3)
+filtered_img = median_filter(inputPic_arr, 3)
 
 
-#cv.imshow("Filtered Image", filtered_img)
-#cv.imshow("Input Image", inputPic)
-#cv.waitKey(0)
+cv.imshow("Filtered Image", filtered_img)
+cv.imshow("Input Image", inputPic)
+cv.waitKey(0)
