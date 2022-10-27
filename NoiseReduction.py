@@ -3,10 +3,7 @@
 import cv2 as cv
 import numpy as np
 from PIL import Image
-
-inputPic = cv.imread("Resources/hamsta input.jpg")
-inputPic_gray = cv.cvtColor(inputPic, cv.COLOR_BGR2GRAY)
-inputPic_arr = np.array(inputPic_gray)
+from TemplateMatchingAutomated import *
 
 
 def median_filter(data, kernel):
@@ -30,6 +27,11 @@ def median_filter(data, kernel):
             )[index]
     return data
 
+
+if __name__ == '__main__':
+    inputPic
+    inputPic_gray = cv.cvtColor(inputPic, cv.COLOR_BGR2GRAY)
+    inputPic_arr = np.array(inputPic_gray)
 
 filtered_img = median_filter(inputPic_arr, 3)
 
