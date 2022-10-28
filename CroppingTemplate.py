@@ -4,7 +4,7 @@ import numpy as np
 cropping = False
 showCropping = True
 x_start, y_start, x_end, y_end = 0, 0, 0, 0
-image = cv.imread("Resources/input picture.jpg")
+image = cv.imread("Resources/1M-2L-1P-1CL-1C (1).png")
 
 def mouse_crop(event, x, y, flags, param):
     # grab references to the global variables
