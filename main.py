@@ -17,10 +17,9 @@ erode = True
 dilate = True
 
 # Manual user cropping for finding initial template
-def RunTemplateCropping():
-    template_cropping(imageInput)
-    # template = cv.imread("Output/CroppedPicture.jpg")
-    # return template
+def RunTemplateCropping(imageInput):
+    CroppedPic = template_cropping(imageInput)
+    return CroppedPic
 
 def RunNoiseReduction():
     nrInput = cv.imread("Output/CroppedPicture.jpg")
@@ -36,7 +35,7 @@ def RunTemplateMatching():
 
 
 if cropPicture:
-    RunTemplateCropping()
+    template = RunTemplateCropping(imageInput)
 
 if reduceNoise:
     RunNoiseReduction()

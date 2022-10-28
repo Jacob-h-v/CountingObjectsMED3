@@ -32,13 +32,8 @@ def TemplateMatching(image, template):
         cv.rectangle(image, (startX, startY), (endX, endY),
                       (0, 0, 255), 3)
     # show the output image
-    cv.imshow("Result", image)
-    cv.waitKey(0)
+    return image
+    #cv.imshow("Result", image)
+    #cv.waitKey(0)
 
-    #showing the result
-    # cv.imshow("Correlation", res)
-    # cv.imwrite('Output/TemplateMatched.png', image)
-    # cv.imshow("Result", image)
-    # cv.waitKey(0)
-
-TemplateMatching(inputPic, templateTest)
+# TemplateMatching(inputPic, templateTest)
