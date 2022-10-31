@@ -47,7 +47,7 @@ def median_filter(data, kernel):
 # Gaussian filter code from lecture 4
 def convolve(image, kernel):
     kernel_size = kernel.shape[0]
-    output = np.zeros((img.shape[0] - kernel_size + 1, img.shape[1] - kernel_size + 1), dtype=np.uint8)
+    output = np.zeros((image.shape[0] - kernel_size + 1, image.shape[1] - kernel_size + 1), dtype=np.uint8)
     for y in range(output.shape[0]):
         for x in range(output.shape[1]):
             slice = image[y:y+kernel_size, x:x+kernel_size]
@@ -63,10 +63,10 @@ def generate_gaussian_kernel(radius, standard_deviation):
     gaussian_kernel *= 1/gaussian_kernel[0,0]
     return gaussian_kernel
 
-img = cv.imread("lion.jpg", cv.IMREAD_GRAYSCALE)
+#img = cv.imread("lion.jpg", cv.IMREAD_GRAYSCALE)
 
-mean_kernel = np.ones((11,11))
-mean = convolve(img, mean_kernel)
+#mean_kernel = np.ones((11,11))
+#mean = convolve(img, mean_kernel)
 
-gaussian_kernel = generate_gaussian_kernel(4, 2.2)
-gaussian = convolve(img, gaussian_kernel)
+#gaussian_kernel = generate_gaussian_kernel(4, 2.2)
+#gaussian = convolve(img, gaussian_kernel)

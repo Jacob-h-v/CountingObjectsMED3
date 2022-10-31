@@ -10,7 +10,7 @@ class OpType(Enum):
     Closing = auto()
 
 
-img = cv.imread('Resources/input picture.jpg')
+img = cv.imread('Resources/1M-2L-1P-1CL-1C (1).png')
 
 # Using OpenCV Functions
 def inbuiltMorphology(img, kernel_size, operation):
