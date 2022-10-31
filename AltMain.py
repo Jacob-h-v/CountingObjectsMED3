@@ -4,6 +4,7 @@ import numpy as np
 from CroppingTemplate import template_cropping, image, crop
 from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
+from Morphology import inbuiltMorphology, OpType
 
 # Runs the template cropping script which returns cropped coordinates
 template_coords = template_cropping(image)
@@ -25,8 +26,14 @@ image_resize = cv.resize(image_processed, new_image_size, interpolation= cv.INTE
 # Subtracting the blurred image from the image to remove the background and highlight the objects
 image_subtracted = cv.subtract(image_resize, image_blurred)
 
+# Binary thresholding
+ret, image_binary = cv.threshold(image_subtracted, 25, 255, cv.THRESH_BINARY)
+
+# Morphology
+image_closed = inbuiltMorphology(image_binary, 5, OpType.Closing)
+
 # Creating Template
-template = crop(image_subtracted, template_coords[0] - gaussian_radius, template_coords[1] - gaussian_radius, template_coords[2] - gaussian_radius, template_coords[3] - gaussian_radius)
+template = crop(image_closed, template_coords[0] - gaussian_radius, template_coords[1] - gaussian_radius, template_coords[2] - gaussian_radius, template_coords[3] - gaussian_radius)
 
 # Manual subtraction
 #img_subtracted = image_resize - image_blurred
@@ -37,11 +44,12 @@ template = crop(image_subtracted, template_coords[0] - gaussian_radius, template
             #img_subtracted[y, x] = 0
 
 # Runs the template matching function using the processed images
-templateMatching_result = TemplateMatching(image, image_subtracted, template, gaussian_radius)
+templateMatching_result = TemplateMatching(image, image_closed, template, gaussian_radius)
 
 #cv.imshow("manual", img_subtracted)
 cv.imshow("blur", image_blurred)
-cv.imshow("subtracted", image_subtracted)
+cv.imshow("Subtracted", image_subtracted)
+cv.imshow("Binary", image_binary)
 cv.imshow("template", template)
 cv.imshow("template matching", templateMatching_result)
 cv.waitKey(0)
