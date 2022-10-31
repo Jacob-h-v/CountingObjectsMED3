@@ -10,12 +10,12 @@ input_gray = cv.cvtColor(inputPic, cv.COLOR_BGR2GRAY)
 
 templateTest = cv.imread("Output/CroppedPicture.jpg", 0)
 
-def TemplateMatching(image, template):
-    image_gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+def TemplateMatching(image, processed, template):
+    #image_gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
     tH, tW = template.shape[:2]
 
-    res = cv.matchTemplate(image_gray, template, cv.TM_CCOEFF_NORMED)
+    res = cv.matchTemplate(processed, template, cv.TM_CCOEFF_NORMED)
     threshold = 0.25
     (yCoords, xCoords) = np.where(res >= threshold)
 
