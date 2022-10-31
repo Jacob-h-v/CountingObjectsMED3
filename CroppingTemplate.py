@@ -25,12 +25,13 @@ def mouse_crop(event, x, y, flags, param):
         # record the ending (x, y) coordinates
         x_end, y_end = x, y
         cropping = False # cropping is finished
-        refPoint = [(x_start, y_start), (x_end, y_end)]
-        if len(refPoint) == 2: #when two points were found
-            roi = oriImage[refPoint[0][1]:refPoint[1][1], refPoint[0][0]:refPoint[1][0]]
-            cv.imshow("Cropped", roi)
-            cv.imwrite('Output/CroppedPicture.jpg', roi)
-            showCropping = False
+        showCropping = False
+        #refPoint = [(x_start, y_start), (x_end, y_end)]
+        #if len(refPoint) == 2: #when two points were found
+            #roi = oriImage[refPoint[0][1]:refPoint[1][1], refPoint[0][0]:refPoint[1][0]]
+            #cv.imshow("Cropped", roi)
+            #cv.imwrite('Output/CroppedPicture.jpg', roi)
+            #showCropping = False
 
 def template_cropping(image):
     cv.namedWindow("image")
@@ -46,8 +47,23 @@ def template_cropping(image):
         cv.waitKey(1)
     # close all open windows
     cv.destroyAllWindows()
-    result = cv.imread("Output/CroppedPicture.jpg")
+    result = [x_start, y_start, x_end, y_end]
     return result
 
-croppedPic = template_cropping(image)
-cv.imshow("result", croppedPic)
+def crop(image, x_start, y_start, x_end, y_end):
+    oriImage = image.copy()
+    refPoint = [(x_start, y_start), (x_end, y_end)]
+    if len(refPoint) == 2:  # when two points were found
+        roi = oriImage[refPoint[0][1]:refPoint[1][1], refPoint[0][0]:refPoint[1][0]]
+        cv.imwrite('Output/CroppedPicture.jpg', roi)
+    return roi
+
+#croppedPic = template_cropping(image)
+#print(croppedPic)
+
+#cropped = crop(image, croppedPic[0], croppedPic[1], croppedPic[2], croppedPic[3])
+
+#cv.imshow("crop", cropped)
+#cv.waitKey(0)
+
+# cv.imshow("result", croppedPic)

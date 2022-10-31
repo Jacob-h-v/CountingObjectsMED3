@@ -10,7 +10,7 @@ input_gray = cv.cvtColor(inputPic, cv.COLOR_BGR2GRAY)
 
 templateTest = cv.imread("Output/CroppedPicture.jpg", 0)
 
-def TemplateMatching(image, processed, template):
+def TemplateMatching(image, processed, template, kernelsize):
     #image_gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
     tH, tW = template.shape[:2]
@@ -29,7 +29,7 @@ def TemplateMatching(image, processed, template):
     # loop over the final bounding boxes
     for (startX, startY, endX, endY) in pick:
         # draw the bounding box on the image
-        cv.rectangle(image, (startX, startY), (endX, endY),
+        cv.rectangle(image, (startX + kernelsize, startY + kernelsize), (endX + kernelsize, endY + kernelsize),
                       (0, 0, 255), 3)
     # show the output image
     return image
