@@ -11,18 +11,18 @@ imageInput_gray = cv.cvtColor(imageInput, cv.COLOR_BGR2GRAY)
 imageInput_arr = np.array(imageInput_gray)
 gaussian_radius = 0
 
-tempCoords = True
 medianFilter = True
-# -------------------------------
 convolve_with_gaussian = True
-# Hint: Don't touch these two :D
-adjustImgSize = True
-subtractBlurred = True
-# -------------------------------
 binaryThresh = True
 closing = True
+# -------------------------------
+# Warning: Modifying these can crash the program
+tempCoords = True
+adjustImgSize = True
+subtractBlurred = True
 createTemplate = True
 matchTemplates = True
+# -------------------------------
 
 # Grab temmplate coordinates
 if tempCoords:
