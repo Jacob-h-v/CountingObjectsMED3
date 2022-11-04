@@ -39,9 +39,7 @@ if convolve_with_gaussian & medianFilter:
     gaussian_kernel = generate_gaussian_kernel(gaussian_radius, 500)
     image_blurred = convolve(image_processed, gaussian_kernel)
     if adjustImgSize:
-        new_image_size = (
-        image_processed.shape[1] - gaussian_radius * 2, image_processed.shape[0] - gaussian_radius * 2)
-        image_resize = cv.resize(image_processed, new_image_size, interpolation=cv.INTER_LINEAR)
+        image_resize = image_processed[gaussian_radius:image_processed.shape[0]-gaussian_radius, gaussian_radius:image_processed.shape[1]-gaussian_radius]
         if subtractBlurred:
             image_subtracted = cv.subtract(image_resize, image_blurred)
 elif convolve_with_gaussian:
@@ -49,9 +47,7 @@ elif convolve_with_gaussian:
     gaussian_kernel = generate_gaussian_kernel(gaussian_radius, 500)
     image_blurred = convolve(imageInput_gray, gaussian_kernel)
     if adjustImgSize:
-        new_image_size = (
-        imageInput_gray.shape[1] - gaussian_radius * 2, imageInput_gray.shape[0] - gaussian_radius * 2)
-        image_resize = cv.resize(imageInput_gray, new_image_size, interpolation=cv.INTER_LINEAR)
+        image_resize = image_processed[gaussian_radius:image_processed.shape[0]-gaussian_radius, gaussian_radius:image_processed.shape[1]-gaussian_radius]
         if subtractBlurred:
             image_subtracted = cv.subtract(image_resize, image_blurred)
 
