@@ -1,59 +1,58 @@
-# This is the beginning of the MED3 "counting things" project.
+import cv2 as cv
+import numpy as np
 
-# Let's fix some version control.
-
-from NoiseReduction import *
-from CroppingTemplate import template_cropping
+from CroppingTemplate import template_cropping, crop
 from TemplateMatchingAutomated import TemplateMatching
+from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
+from Morphology import inbuiltMorphology, OpType
 
-imageInput = cv.imread("Resources/input picture.jpg")
+imageInput = cv.imread("Resources/1M-2L-1P-1CL-1C (1).png")
 imageInput_gray = cv.cvtColor(imageInput, cv.COLOR_BGR2GRAY)
 imageInput_arr = np.array(imageInput_gray)
 
-reduceNoise = True
-cropPicture = True
-matchTemplate = True
-erode = True
-dilate = True
+tempCoords = True
+medianFilter = True
+convolve_with_gaussian = True
+adjustImgSize = True
+subtractBlurred = True
+binaryThresh = True
+closing = True
+createTemplate = True
+matchTemplates = True
 
-# Manual user cropping for finding initial template
-def RunTemplateCropping(imageInput):
-    CroppedPic = template_cropping(imageInput)
-    return CroppedPic
+if tempCoords:
+    template_coords = template_cropping(imageInput)
 
-def RunNoiseReduction():
-    nrInput = cv.imread("Output/CroppedPicture.jpg")
-    nrInput_gray = cv.cvtColor(nrInput, cv.COLOR_BGR2GRAY)
-    nrInput_arr = np.array(nrInput_gray)
-    nrOutput = median_filter(nrInput_arr, 3)
-    return nrOutput
+if medianFilter:
+    image_processed = median_filter(imageInput_gray, 3)
 
-def RunTemplateMatching():
-    TemplateMatching(inputPic_gray, noiseGone)
-    result = cv.imread("Output/TemplateMatched.png")
-    return result
+if convolve_with_gaussian:
+    gaussian_radius = 25
+    gaussian_kernel = generate_gaussian_kernel(gaussian_radius, 500)
+    image_blurred = convolve(image_processed, gaussian_kernel)
+    if adjustImgSize:
+        new_image_size = (
+        image_processed.shape[1] - gaussian_radius * 2, image_processed.shape[0] - gaussian_radius * 2)
+        image_resize = cv.resize(image_processed, new_image_size, interpolation=cv.INTER_LINEAR)
+        if subtractBlurred:
+            image_subtracted = cv.subtract(image_resize, image_blurred)
 
+if binaryThresh:
+    ret, image_binary = cv.threshold(image_subtracted, 25, 255, cv.THRESH_BINARY)
 
-if cropPicture:
-    template = RunTemplateCropping(imageInput)
+if closing:
+    image_closed = inbuiltMorphology(image_binary, 5, OpType.Closing)
 
-if reduceNoise:
-    RunNoiseReduction()
-    noiseGone = RunNoiseReduction()
+if createTemplate:
+    template = crop(image_closed, template_coords[0] - gaussian_radius, template_coords[1] - gaussian_radius, template_coords[2] - gaussian_radius, template_coords[3] - gaussian_radius)
 
-#if erode:
+if matchTemplates:
+    templateMatching_result = TemplateMatching(imageInput, image_closed, template, gaussian_radius)
+    
 
-    # run erosion from morphology script
-
-#if dilate:
-
-    # run dilation from morphology script
-
-if matchTemplate:
-    RunTemplateMatching()
-    templateMatchingResult = RunTemplateMatching()
-
-cv.imshow("Filtered Image", noiseGone)
-cv.imshow("Input Image", imageInput)
-cv.imshow("TemplateMatched", templateMatchingResult)
+cv.imshow("blur", image_blurred)
+cv.imshow("Subtracted", image_subtracted)
+cv.imshow("Binary", image_binary)
+cv.imshow("template", template)
+cv.imshow("template matching", templateMatching_result)
 cv.waitKey(0)

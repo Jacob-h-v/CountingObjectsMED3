@@ -4,12 +4,12 @@ import numpy as np
 cropping = False
 showCropping = True
 x_start, y_start, x_end, y_end = 0, 0, 0, 0
-image = cv.imread("Resources/1M-2L-1P-1CL-1C (1).png")
+tempimage = cv.imread("Resources/1M-2L-1P-1CL-1C (1).png")
 
 def mouse_crop(event, x, y, flags, param):
     # grab references to the global variables
     global x_start, y_start, x_end, y_end, cropping, showCropping
-    oriImage = image.copy()
+    oriImage = tempimage.copy()
 
     # if the left mouse button was DOWN, start RECORDING
     # (x, y) coordinates and indicate that cropping is being
@@ -35,6 +35,7 @@ def mouse_crop(event, x, y, flags, param):
 
 def template_cropping(image):
     cv.namedWindow("image")
+    tempimage = image
     cv.setMouseCallback("image", mouse_crop)
 
     while showCropping:
