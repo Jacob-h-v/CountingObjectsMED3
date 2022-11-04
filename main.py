@@ -33,7 +33,7 @@ if tempCoords:
 if medianFilter:
     image_processed = median_filter(imageInput_gray, 3)
 
-# convolve with gaussian happens here
+# Convolve with gaussian happens here
 if convolve_with_gaussian & medianFilter:
     gaussian_radius = 25
     gaussian_kernel = generate_gaussian_kernel(gaussian_radius, 500)
