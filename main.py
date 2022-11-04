@@ -11,6 +11,7 @@ imageInput_gray = cv.cvtColor(imageInput, cv.COLOR_BGR2GRAY)
 imageInput_arr = np.array(imageInput_gray)
 gaussian_radius = 0
 
+# These can be changed between True / False to include or exclude different types of image processing.
 medianFilter = True
 convolve_with_gaussian = True
 binaryThresh = True
