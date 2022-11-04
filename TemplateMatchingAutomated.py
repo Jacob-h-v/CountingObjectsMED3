@@ -29,7 +29,7 @@ def TemplateMatching(image, processed, template, kernelsize):
     # loop over the final bounding boxes
     for (startX, startY, endX, endY) in pick:
         # draw the bounding box on the image
-        cv.rectangle(image, (startX + kernelsize, startY + kernelsize), (endX + kernelsize, endY + kernelsize),
+        cv.rectangle(image, (startX + kernelsize, startY + kernelsize//2), (endX + kernelsize, endY + kernelsize//2),
                       (0, 0, 255), 3)
     # show the output image
     return image
