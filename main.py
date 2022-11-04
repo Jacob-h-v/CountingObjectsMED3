@@ -7,11 +7,10 @@ from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType
 
 imageInput = cv.imread("Resources/1M-2L-1P-1CL-1C (1).png")
-imageInput_gray = cv.cvtColor(imageInput, cv.COLOR_BGR2GRAY)
-imageInput_arr = np.array(imageInput_gray)
 gaussian_radius = 0
 
 # These can be changed between True / False to include or exclude different types of image processing.
+resize = True
 medianFilter = True
 convolve_with_gaussian = True
 binaryThresh = True
@@ -24,6 +23,16 @@ subtractBlurred = True
 createTemplate = True
 matchTemplates = True
 # -------------------------------
+
+if resize:
+    scale_percent = 50  # percent of original size
+    width = int(imageInput.shape[1] * scale_percent / 100)
+    height = int(imageInput.shape[0] * scale_percent / 100)
+    dim = (width, height)
+    imageInput = cv.resize(imageInput, dim, interpolation=cv.INTER_AREA)
+
+imageInput_gray = cv.cvtColor(imageInput, cv.COLOR_BGR2GRAY)
+imageInput_arr = np.array(imageInput_gray)
 
 # Grab temmplate coordinates
 if tempCoords:
@@ -106,5 +115,8 @@ if createTemplate & tempCoords:
 
 if createTemplate & matchTemplates & tempCoords:
     cv.imshow("template matching", templateMatching_result)
+
+if closing:
+    cv.imshow("Closed", image_closed)
 
 cv.waitKey(0)
