@@ -13,12 +13,12 @@ gaussian_radius = 0
 
 tempCoords = True
 medianFilter = True
-
+# -------------------------------
 convolve_with_gaussian = True
 # Hint: Don't touch these two :D
 adjustImgSize = True
 subtractBlurred = True
-
+# -------------------------------
 binaryThresh = True
 closing = True
 createTemplate = True
@@ -84,10 +84,7 @@ elif createTemplate & tempCoords & medianFilter:
 elif createTemplate & tempCoords:
     template = crop(imageInput_gray, template_coords[0] - gaussian_radius, template_coords[1] - gaussian_radius, template_coords[2] - gaussian_radius, template_coords[3] - gaussian_radius)
 
-
-
-
-
+# Match template against processed image
 if matchTemplates & createTemplate & closing & tempCoords:
     templateMatching_result = TemplateMatching(imageInput, image_closed, template, gaussian_radius)
 elif matchTemplates & createTemplate & binaryThresh & tempCoords:
@@ -98,7 +95,8 @@ elif matchTemplates & createTemplate & medianFilter & tempCoords:
     templateMatching_result = TemplateMatching(imageInput, image_processed, template, gaussian_radius)
 elif matchTemplates & createTemplate & tempCoords:
     templateMatching_result = TemplateMatching(imageInput, imageInput_gray, template, gaussian_radius)
-    
+
+# Display images generated along the way
 if convolve_with_gaussian:
     cv.imshow("blur", image_blurred)
     cv.imshow("Subtracted", image_subtracted)
