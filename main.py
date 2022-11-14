@@ -4,7 +4,7 @@ import numpy as np
 from CroppingTemplate import template_cropping, crop
 from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
-from Morphology import inbuiltMorphology, OpType
+from Morphology import inbuiltMorphology, OpType, morphology, Closing
 
 imageInput = cv.imread("Resources/1M-2L-1P-1CL-1C (1).png")
 gaussian_radius = 0
@@ -71,6 +71,7 @@ elif binaryThresh:
 # Run closing operation
 if closing & binaryThresh:
     image_closed = inbuiltMorphology(image_binary, 5, OpType.Closing)
+    #image_closed = Closing(image_binary, 11, ([[0, 1, 0], [1, 1, 1], [0, 1, 0]]))
 elif closing & convolve_with_gaussian:
     image_closed = inbuiltMorphology(image_subtracted, 5, OpType.Closing)
 elif closing & medianFilter:

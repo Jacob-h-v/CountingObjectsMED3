@@ -12,7 +12,9 @@ templateTest = cv.imread("Output/CroppedPicture.jpg", 0)
 
 def TemplateMatching(image, processed, template, kernelsize):
     #image_gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-
+    image = np.array(image, dtype=np.uint8)
+    processed = np.array(processed, dtype=np.uint8)
+    template = np.array(template, dtype=np.uint8)
     tH, tW = template.shape[:2]
 
     res = cv.matchTemplate(processed, template, cv.TM_CCOEFF_NORMED)
