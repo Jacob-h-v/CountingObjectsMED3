@@ -50,10 +50,10 @@ def morphology(img, kernel_size, operation):
         for x in range(output.shape[1]):
             roi = img[y:y+kernel_size, x:x+kernel_size]
             # Dilation
-            if operation == OpType.Closing and (roi == kernel).any():
+            if operation == OpType.Dilation and (roi == kernel).any():
                 output[y, x] = true_value
             # Erosion
-            if operation == OpType.Closing and (roi == kernel).all():
+            if operation == OpType.Erosion and (roi == kernel).all():
                 output[y, x] = true_value
 
     return output

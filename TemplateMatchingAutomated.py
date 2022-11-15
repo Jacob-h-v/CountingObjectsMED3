@@ -26,7 +26,8 @@ def TemplateMatching(image, processed, template, kernelsize):
         rects.append((x, y, x + tW, y + tH))
 
     pick = non_max_suppression(np.array(rects), 0.1)
-    print(len(pick))
+    resultAmount = len(pick)
+    print(resultAmount)
 
     # loop over the final bounding boxes
     for (startX, startY, endX, endY) in pick:
@@ -34,7 +35,7 @@ def TemplateMatching(image, processed, template, kernelsize):
         cv.rectangle(image, (startX + kernelsize, startY + kernelsize//2), (endX + kernelsize, endY + kernelsize//2),
                       (0, 0, 255), 3)
     # show the output image
-    return image
+    return image, resultAmount
     #cv.imshow("Result", image)
     #cv.waitKey(0)
 

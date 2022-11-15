@@ -6,7 +6,7 @@ from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
 
-imageInput = cv.imread("Resources/JPEGbilleder/Lego/IMG_0476.JPEG")
+imageInput = cv.imread("Resources/JPEGbilleder/Coins/GreenBackground/IMG_0383.JPEG")
 imageInput = np.array(imageInput, dtype=np.uint8)
 
 # Settings
@@ -97,15 +97,17 @@ elif createTemplate & tempCoords:
 
 # Match template against processed image
 if matchTemplates & createTemplate & closing & tempCoords:
-    templateMatching_result = TemplateMatching(imageInput, image_closed, template, gaussian_radius)
+    templateMatching_result, templateMatching_count = TemplateMatching(imageInput, image_closed, template, gaussian_radius)
 elif matchTemplates & createTemplate & binaryThresh & tempCoords:
-    templateMatching_result = TemplateMatching(imageInput, image_binary, template, gaussian_radius)
+    templateMatching_result, templateMatching_count = TemplateMatching(imageInput, image_binary, template, gaussian_radius)
 elif matchTemplates & createTemplate & convolve_with_gaussian & tempCoords:
-    templateMatching_result = TemplateMatching(imageInput, image_subtracted, template, gaussian_radius)
+    templateMatching_result, templateMatching_count = TemplateMatching(imageInput, image_subtracted, template, gaussian_radius)
 elif matchTemplates & createTemplate & medianFilter & tempCoords:
-    templateMatching_result = TemplateMatching(imageInput, image_processed, template, gaussian_radius)
+    templateMatching_result, templateMatching_count = TemplateMatching(imageInput, image_processed, template, gaussian_radius)
 elif matchTemplates & createTemplate & tempCoords:
-    templateMatching_result = TemplateMatching(imageInput, imageInput_gray, template, gaussian_radius)
+    templateMatching_result, templateMatching_count = TemplateMatching(imageInput, imageInput_gray, template, gaussian_radius)
+
+templateMatching_result = cv.putText(templateMatching_result, F"{templateMatching_count}", (15,65), 1, 4, (0, 0, 255), 5, cv.LINE_AA)
 
 # Display images generated along the way
 if convolve_with_gaussian:
