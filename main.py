@@ -6,7 +6,7 @@ from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
 
-imageInput = cv.imread("Resources/JPEGbilleder/Coins/GreenBackground/IMG_0383.JPEG")
+imageInput = cv.imread("Resources/JPEGbilleder/Coins/NormalBackground/1M-2L-1P-1CL-1C_(1)(1).jpg")
 imageInput = np.array(imageInput, dtype=np.uint8)
 
 # Settings
@@ -21,6 +21,7 @@ medianFilter = True
 convolve_with_gaussian = True
 binaryThresh = True
 closing = True
+testing = True
 # -------------------------------
 # Warning: Modifying these can crash the program
 tempCoords = True
@@ -110,12 +111,12 @@ elif matchTemplates & createTemplate & tempCoords:
 templateMatching_result = cv.putText(templateMatching_result, F"{templateMatching_count}", (15,65), 1, 4, (0, 0, 255), 5, cv.LINE_AA)
 
 # Display images generated along the way
-if convolve_with_gaussian:
-    cv.imshow("blur", image_blurred)
-    cv.imshow("Subtracted", image_subtracted)
+#if convolve_with_gaussian:
+    #cv.imshow("blur", image_blurred)
+    #cv.imshow("Subtracted", image_subtracted)
 
-if binaryThresh:
-    cv.imshow("Binary", image_binary)
+#if binaryThresh:
+    #cv.imshow("Binary", image_binary)
 
 if createTemplate & tempCoords:
     cv.imshow("template", template)
@@ -125,5 +126,10 @@ if createTemplate & matchTemplates & tempCoords:
 
 if closing:
     cv.imshow("Closed", image_closed)
+
+if testing:
+    cv.imwrite('Output/Coins/NormalBackground/CoinNBtest1_result.png', templateMatching_result)
+    cv.imwrite('Output/Coins/NormalBackground/CoinNBtest1_final.png', image_closed)
+    cv.imwrite('Output/Coins/NormalBackground/CoinNBtest1_template.png', template)
 
 cv.waitKey(0)

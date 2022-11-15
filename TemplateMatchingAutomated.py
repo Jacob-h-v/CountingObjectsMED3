@@ -18,7 +18,7 @@ def TemplateMatching(image, processed, template, kernelsize):
     tH, tW = template.shape[:2]
 
     res = cv.matchTemplate(processed, template, cv.TM_CCOEFF_NORMED)
-    threshold = 0.23
+    threshold = 0.3
     (yCoords, xCoords) = np.where(res >= threshold)
 
     rects = []
