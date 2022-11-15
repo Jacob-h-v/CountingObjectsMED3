@@ -23,6 +23,7 @@ convolve_with_gaussian = True
 binaryThresh = True
 closing = True
 testing = True # This will write the output image, closed image and template to files in the "Output" folder.
+# Don't forget to rename the outputs in the bottom of the script, if testing is enabled.
 # -------------------------------
 # What to display after the program runs
 displayMatchingResult = True
