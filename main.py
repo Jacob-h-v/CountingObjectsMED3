@@ -8,8 +8,12 @@ from Morphology import inbuiltMorphology, OpType, morphology, Closing
 
 imageInput = cv.imread("Resources/JPEGbilleder/Lego/IMG_0476.JPEG")
 imageInput = np.array(imageInput, dtype=np.uint8)
+
+# Settings
 gaussian_radius = 25
 closing_kernel = 5
+# structuring_element_erosion = 3
+# structuring_element_dilation = [[0, 1, 0], [1, 1, 1], [0, 1, 0]]
 
 # These can be changed between True / False to include or exclude different types of image processing.
 resize = True
@@ -71,7 +75,7 @@ elif binaryThresh:
 # Run closing operation
 if closing & binaryThresh:
     image_closed = inbuiltMorphology(image_binary, closing_kernel, OpType.Closing)
-    #image_closed = Closing(image_binary, 11, ([[0, 1, 0], [1, 1, 1], [0, 1, 0]]))
+    # image_closed = Closing(image_binary, structuring_element_erosion, structuring_element_dilation)
 elif closing & convolve_with_gaussian:
     image_closed = inbuiltMorphology(image_subtracted, closing_kernel, OpType.Closing)
 elif closing & medianFilter:
