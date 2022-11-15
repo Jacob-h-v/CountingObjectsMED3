@@ -1,56 +1,114 @@
 import cv2 as cv
 import numpy as np
 
-from CroppingTemplate import template_cropping, tempimage, crop
+from CroppingTemplate import template_cropping, crop
 from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
-from Morphology import inbuiltMorphology, OpType
+from Morphology import inbuiltMorphology, OpType, morphology, Closing
 
-# Runs the template cropping script which returns cropped coordinates
-template_coords = template_cropping(tempimage)
+imageInput = cv.imread("Resources/JPEGbilleder/Coins/GreenBackground/IMG_0383.JPEG")
+imageInput = np.array(imageInput, dtype=np.uint8)
+tempImage = imageInput
 
-# Taking the image and reducing noise by putting it through a median filter
-image_gray = cv.cvtColor(tempimage, cv.COLOR_BGR2GRAY)
-image_arr = np.array(image_gray)
-image_processed = median_filter(image_gray, 3)
-
-# Creating a Gaussian Kernel and convoluting it to the Image to create a blured image
+# Settings
 gaussian_radius = 25
-gaussian_kernel = generate_gaussian_kernel(gaussian_radius, 500)
-image_blurred = convolve(image_processed, gaussian_kernel)
+closing_kernel = 5
+# structuring_element_erosion = 3
+# structuring_element_dilation = [[0, 1, 0], [1, 1, 1], [0, 1, 0]]
 
-# Resizing the image, so it matches the size of the blurred image after convolution
-image_resize = image_processed[gaussian_radius:image_processed.shape[0]-gaussian_radius, gaussian_radius:image_processed.shape[1]-gaussian_radius]
+# These can be changed between True / False to include or exclude different types of image processing.
+resize = True
+medianFilter = True
+convolve_with_gaussian = True
+binaryThresh = True
+closing = True
+testing = False
+# -------------------------------
+# Warning: Modifying these can crash the program
+tempCoords = True
+adjustImgSize = True
+subtractBlurred = True
+createTemplate = True
+matchTemplates = True
+# -------------------------------
 
-# Subtracting the blurred image from the image to remove the background and highlight the objects
-image_subtracted = cv.subtract(image_resize, image_blurred)
+if resize:
+    scale_percent = 50  # percent of original size
+    width = int(tempImage.shape[1] * scale_percent / 100)
+    height = int(tempImage.shape[0] * scale_percent / 100)
+    dim = (width, height)
+    tempImage = cv.resize(tempImage, dim, interpolation=cv.INTER_AREA)
+    imageInput = tempImage
 
-# Binary thresholding
-ret, image_binary = cv.threshold(image_subtracted, 25, 255, cv.THRESH_BINARY)
+# Grab temmplate coordinates
+if tempCoords:
+    template_coords = template_cropping(tempImage)
 
-# Morphology
-image_morphed = inbuiltMorphology(image_binary, 5, OpType.Dilation)
-image_morphed = inbuiltMorphology(image_morphed, 5, OpType.Erosion)
+tempImage_gray = cv.cvtColor(tempImage, cv.COLOR_BGR2GRAY)
+tempImage = np.array(tempImage_gray, dtype=np.uint8)
 
-# Creating Template
-template = crop(image_morphed, template_coords[0] - gaussian_radius, template_coords[1] - gaussian_radius, template_coords[2] - gaussian_radius, template_coords[3] - gaussian_radius)
+# Run median filter
+if medianFilter:
+    tempImage = median_filter(tempImage, 3)
+    # median_filtered_img = tempImage
 
-# Manual subtraction
-#img_subtracted = image_resize - image_blurred
+# Convolve with gaussian happens here
+if convolve_with_gaussian:
+    gaussian_kernel = generate_gaussian_kernel(gaussian_radius, 500)
+    image_blurred = convolve(tempImage, gaussian_kernel)
+    if adjustImgSize:
+        image_resize = tempImage[gaussian_radius:tempImage.shape[0]-gaussian_radius, gaussian_radius:tempImage.shape[1]-gaussian_radius]
+        if subtractBlurred:
+            tempImage = cv.subtract(image_resize, image_blurred)
+            image_subtracted = tempImage
 
-#for y in range(img_subtracted.shape[0]):
-    #for x in range(img_subtracted.shape[1]):
-        #if img_subtracted[y, x] <= 0:
-            #img_subtracted[y, x] = 0
 
-# Runs the template matching function using the processed images
-templateMatching_result = TemplateMatching(tempimage, image_morphed, template, gaussian_radius)
+# Binary thresholding happens here
+if binaryThresh:
+    ret, tempImage = cv.threshold(tempImage, 25, 255, cv.THRESH_BINARY)
+    image_binary = tempImage
 
-#cv.imshow("manual", img_subtracted)
-cv.imshow("blur", image_blurred)
-cv.imshow("Subtracted", image_subtracted)
-cv.imshow("Binary", image_binary)
-cv.imshow("Morphed", image_morphed)
-cv.imshow("template", template)
-cv.imshow("template matching", templateMatching_result)
+
+# Run closing operation
+if closing:
+    tempImage = inbuiltMorphology(tempImage, closing_kernel, OpType.Closing)
+    # tempImage = Closing(image_binary, structuring_element_erosion, structuring_element_dilation)
+    image_closed = tempImage
+
+
+# Crop out the selected template using coordinates
+if createTemplate & tempCoords:
+    template = crop(tempImage, template_coords[0] - gaussian_radius, template_coords[1] - gaussian_radius, template_coords[2] - gaussian_radius, template_coords[3] - gaussian_radius)
+
+
+# Match template against processed image
+if matchTemplates & createTemplate & tempCoords:
+    tempImage, templateMatching_count = TemplateMatching(imageInput, tempImage, template, gaussian_radius)
+    # templateMatching_result = tempImage
+
+
+tempImage = cv.putText(tempImage, F"{templateMatching_count}", (15, 65), 1, 4, (0, 0, 255), 5, cv.LINE_AA)
+
+# Display images generated along the way
+if convolve_with_gaussian:
+    cv.imshow("blur", image_blurred)
+    cv.imshow("Subtracted", image_subtracted)
+
+if binaryThresh:
+    cv.imshow("Binary", image_binary)
+
+if createTemplate & tempCoords:
+    cv.imshow("template", template)
+
+if createTemplate & matchTemplates & tempCoords:
+    cv.imshow("template matching", tempImage)
+
+if closing:
+    cv.imshow("Closed", image_closed)
+
+if testing:
+    cv.imwrite('Output/Coins/NormalBackground/CoinNBtest1_result.png', tempImage)
+    cv.imwrite('Output/Coins/NormalBackground/CoinNBtest1_final.png', image_closed)
+    cv.imwrite('Output/Coins/NormalBackground/CoinNBtest1_template.png', template)
+
 cv.waitKey(0)
