@@ -6,7 +6,7 @@ from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
 
-imageInput = cv.imread("Resources/1M-2L-1P-1CL-1C (1).png")
+imageInput = cv.imread("Resources/1M-2L-3P-3CL-3C.png")
 gaussian_radius = 0
 
 # These can be changed between True / False to include or exclude different types of image processing.
@@ -14,7 +14,7 @@ resize = True
 medianFilter = True
 convolve_with_gaussian = True
 binaryThresh = True
-closing = True
+closing = False
 # -------------------------------
 # Warning: Modifying these can crash the program
 tempCoords = True
