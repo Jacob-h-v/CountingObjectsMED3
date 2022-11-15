@@ -22,7 +22,7 @@ medianFilter = True
 convolve_with_gaussian = True
 binaryThresh = True
 closing = True
-testing = True
+testing = True # This will write the output image, closed image and template to files in the "Output" folder.
 # -------------------------------
 # What to display after the program runs
 displayMatchingResult = True
