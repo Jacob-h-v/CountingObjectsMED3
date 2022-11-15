@@ -22,7 +22,15 @@ medianFilter = True
 convolve_with_gaussian = True
 binaryThresh = True
 closing = True
-testing = True
+testing = True # This will write the output image, closed image and template to files in the "Output" folder.
+# -------------------------------
+# What to display after the program runs
+displayMatchingResult = True
+displayClosing = True
+displayTemplate = True
+displayBinaryThresh = True
+displayBlurred = True
+displaySubtracted = True
 # -------------------------------
 # Warning: Modifying these can crash the program
 tempCoords = True
@@ -91,19 +99,21 @@ tempImage = cv.putText(tempImage, F"{templateMatching_count}", (15, 65), 1, 4, (
 
 # Display images generated along the way
 if convolve_with_gaussian:
-    cv.imshow("blur", image_blurred)
-    cv.imshow("Subtracted", image_subtracted)
+    if displayBlurred:
+        cv.imshow("blur", image_blurred)
+    if displaySubtracted:
+        cv.imshow("Subtracted", image_subtracted)
 
-if binaryThresh:
+if binaryThresh & displayBinaryThresh:
     cv.imshow("Binary", image_binary)
 
-if createTemplate & tempCoords:
+if createTemplate & tempCoords & displayTemplate:
     cv.imshow("template", template)
 
-if createTemplate & matchTemplates & tempCoords:
+if createTemplate & matchTemplates & tempCoords & displayMatchingResult:
     cv.imshow("template matching", tempImage)
 
-if closing:
+if closing & displayClosing:
     cv.imshow("Closed", image_closed)
 
 if testing:
