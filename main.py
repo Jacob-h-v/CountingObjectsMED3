@@ -6,7 +6,8 @@ from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
 
-imageInput = cv.imread("Resources/1M-2L-3P-3CL-3C.png")
+imageInput = cv.imread("Resources/JPEGbilleder/Lego/IMG_0476.JPEG")
+imageInput = np.array(imageInput, dtype=np.uint8)
 gaussian_radius = 0
 
 # These can be changed between True / False to include or exclude different types of image processing.
