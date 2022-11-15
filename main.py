@@ -8,14 +8,15 @@ from Morphology import inbuiltMorphology, OpType, morphology, Closing
 
 imageInput = cv.imread("Resources/JPEGbilleder/Lego/IMG_0476.JPEG")
 imageInput = np.array(imageInput, dtype=np.uint8)
-gaussian_radius = 0
+gaussian_radius = 25
+closing_kernel = 5
 
 # These can be changed between True / False to include or exclude different types of image processing.
 resize = True
 medianFilter = True
 convolve_with_gaussian = True
 binaryThresh = True
-closing = False
+closing = True
 # -------------------------------
 # Warning: Modifying these can crash the program
 tempCoords = True
@@ -45,7 +46,6 @@ if medianFilter:
 
 # Convolve with gaussian happens here
 if convolve_with_gaussian & medianFilter:
-    gaussian_radius = 25
     gaussian_kernel = generate_gaussian_kernel(gaussian_radius, 500)
     image_blurred = convolve(image_processed, gaussian_kernel)
     if adjustImgSize:
@@ -53,7 +53,6 @@ if convolve_with_gaussian & medianFilter:
         if subtractBlurred:
             image_subtracted = cv.subtract(image_resize, image_blurred)
 elif convolve_with_gaussian:
-    gaussian_radius = 25
     gaussian_kernel = generate_gaussian_kernel(gaussian_radius, 500)
     image_blurred = convolve(imageInput_gray, gaussian_kernel)
     if adjustImgSize:
@@ -71,14 +70,14 @@ elif binaryThresh:
 
 # Run closing operation
 if closing & binaryThresh:
-    image_closed = inbuiltMorphology(image_binary, 5, OpType.Closing)
+    image_closed = inbuiltMorphology(image_binary, closing_kernel, OpType.Closing)
     #image_closed = Closing(image_binary, 11, ([[0, 1, 0], [1, 1, 1], [0, 1, 0]]))
 elif closing & convolve_with_gaussian:
-    image_closed = inbuiltMorphology(image_subtracted, 5, OpType.Closing)
+    image_closed = inbuiltMorphology(image_subtracted, closing_kernel, OpType.Closing)
 elif closing & medianFilter:
-    image_closed = inbuiltMorphology(image_processed, 5, OpType.Closing)
+    image_closed = inbuiltMorphology(image_processed, closing_kernel, OpType.Closing)
 elif closing:
-    image_closed = inbuiltMorphology(imageInput_gray, 5, OpType.Closing)
+    image_closed = inbuiltMorphology(imageInput_gray, closing_kernel, OpType.Closing)
 
 # Crop out the selected template using coordinates
 if createTemplate & closing & tempCoords:
