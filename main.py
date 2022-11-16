@@ -6,7 +6,9 @@ from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
 
-imageInput = cv.imread("Resources/JPEGbilleder/Coins/GreenBackground/IMG_0383.JPEG")
+currentImageName = "1M-2L-1P-1CL-1C-16A (1)"
+currentDirectory = "Coins/GreenBackground"
+imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}.JPEG")
 imageInput = np.array(imageInput, dtype=np.uint8)
 tempImage = imageInput
 
@@ -29,9 +31,9 @@ testing = True  # This will write the output image, closed image and template to
 displayMatchingResult = True
 displayClosing = True
 displayTemplate = True
-displayBinaryThresh = True
-displayBlurred = True
-displaySubtracted = True
+displayBinaryThresh = False
+displayBlurred = False
+displaySubtracted = False
 # -------------------------------
 # Warning: Modifying these can crash the program
 tempCoords = True
@@ -118,8 +120,8 @@ if closing & displayClosing:
     cv.imshow("Closed", image_closed)
 
 if testing:
-    cv.imwrite('Output/Coins/NormalBackground/CoinNBtest1_result.png', tempImage)
-    cv.imwrite('Output/Coins/NormalBackground/CoinNBtest1_final.png', image_closed)
-    cv.imwrite('Output/Coins/NormalBackground/CoinNBtest1_template.png', template)
+    cv.imwrite(F'Output/{currentDirectory}/Test1-{currentImageName}_result.png', tempImage)
+    cv.imwrite(F'Output/{currentDirectory}/Test1-{currentImageName}_final.png', image_closed)
+    cv.imwrite(F'Output/{currentDirectory}/Test1-{currentImageName}_template.png', template)
 
 cv.waitKey(0)
