@@ -6,8 +6,8 @@ from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
 
-currentImageName = "1M-2L-1P-1CL-1C-16A (1)"
-currentDirectory = "Coins/GreenBackground"
+currentImageName = "2P-2L-3P-1CL-3C-16A (2)"
+currentDirectory = "Puzzle/GreenBackground"
 imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}.JPEG")
 imageInput = np.array(imageInput, dtype=np.uint8)
 tempImage = imageInput
