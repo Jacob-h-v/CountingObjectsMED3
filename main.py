@@ -6,9 +6,9 @@ from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
 
-currentImageName = "2P-2L-3P-2CL-3C_(1)"
-currentDirectory = "Puzzle/NormalBackground"
-imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}.JPG")
+currentImageName = "3L-3L-3P-3CL-2C-20A (3).jpg"
+currentDirectory = "Lego/MultiColorBackground"
+imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}")
 imageInput = np.array(imageInput, dtype=np.uint8)
 tempImage = imageInput
 
