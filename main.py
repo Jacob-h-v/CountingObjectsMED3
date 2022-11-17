@@ -15,8 +15,8 @@ tempImage = imageInput
 # Settings
 gaussian_radius = 25
 closing_kernel = 5
-# structuring_element_erosion = 3
-# structuring_element_dilation = [[0, 1, 0], [1, 1, 1], [0, 1, 0]]
+structuring_element_erosion = 3
+structuring_element_dilation = [[0, 1, 0], [1, 1, 1], [0, 1, 0]]
 
 # These can be changed between True / False to include or exclude different types of image processing.
 resize = True
