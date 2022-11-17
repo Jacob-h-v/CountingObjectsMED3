@@ -6,25 +6,26 @@ from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
 
-currentImageName = "3L-3L-3P-3CL-2C-20A (3).jpg"
-currentDirectory = "Lego/MultiColorBackground"
+currentImageName = "1M-1L-1P-1CL-3C.jpg"
+currentDirectory = "Coins/NormalBackground"
 imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}")
 imageInput = np.array(imageInput, dtype=np.uint8)
 tempImage = imageInput
 
 # Settings
-gaussian_radius = 25
+gaussian_radius = 30
+newGauss = False
 closing_kernel = 5
 structuring_element_erosion = 3
 structuring_element_dilation = [[0, 1, 0], [1, 1, 1], [0, 1, 0]]
 
 # These can be changed between True / False to include or exclude different types of image processing.
 resize = True
-medianFilter = True
+medianFilter = False
 convolve_with_gaussian = True
-binaryThresh = True
+binaryThresh = False
 closing = True
-testing = True  # This will write the output image, closed image and template to files in the "Output" folder.
+testing = False  # This will write the output image, closed image and template to files in the "Output" folder.
 # Don't forget to rename the outputs in the bottom of the script, if testing is enabled.
 # -------------------------------
 # What to display after the program runs
@@ -55,8 +56,9 @@ if resize:
 if tempCoords:
     template_coords = template_cropping(tempImage)
 
-tempImage_gray = cv.cvtColor(tempImage, cv.COLOR_BGR2GRAY)
-tempImage = np.array(tempImage_gray, dtype=np.uint8)
+# tempImage_gray = cv.cvtColor(tempImage, cv.COLOR_BGR2GRAY)
+# tempImage_hsv = cv.cvtColor(tempImage, cv.COLOR_BGR2HSV)
+tempImage = np.array(tempImage, dtype=np.uint8)
 
 # Run median filter
 if medianFilter:
@@ -65,8 +67,16 @@ if medianFilter:
 
 # Convolve with gaussian happens here
 if convolve_with_gaussian:
-    gaussian_kernel = generate_gaussian_kernel(gaussian_radius, 500)
-    image_blurred = convolve(tempImage, gaussian_kernel)
+    if newGauss:
+        gaussian_kernel = generate_gaussian_kernel(gaussian_radius, 15)
+        file = open("savedGauss", "wb")
+        np.save(file, gaussian_kernel)
+        file.close
+
+    file = open("savedGauss", "rb")
+    savedGauss = np.load(file)
+    # print(savedGauss)
+    image_blurred = convolve(tempImage, savedGauss)
     if adjustImgSize:
         image_resize = tempImage[gaussian_radius:tempImage.shape[0]-gaussian_radius, gaussian_radius:tempImage.shape[1]-gaussian_radius]
         if subtractBlurred:
