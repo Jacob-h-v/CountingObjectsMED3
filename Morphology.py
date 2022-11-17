@@ -70,8 +70,6 @@ def Closing(image, ErosionSE, dilationSE):
             temp = inputImg[i - elementRadius: i + elementRadius + 1, j - elementRadius: j + elementRadius + 1]
             product = temp * structuringElementErosion
             erodedImg[i, j] = np.min(product)
-            return erodedImg
-        return erodedImg
 
     p, q = erodedImg.shape # Acquiring size of erosion output
     dilatedImg = np.zeros((p, q), dtype=np.uint8)
@@ -83,8 +81,7 @@ def Closing(image, ErosionSE, dilationSE):
             temp = erodedImg[i-constant: i+constant+1, j-constant: j+constant+1]
             product = temp * structuringElementDilation
             dilatedImg[i, j] = np.max(product)
-            return dilatedImg
-        return dilatedImg
+
     closedImg = dilatedImg
     return closedImg
 
