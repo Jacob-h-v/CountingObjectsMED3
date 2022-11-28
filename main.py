@@ -24,7 +24,7 @@ resize = True
 medianFilter = False
 convolve_with_gaussian = True
 binaryThresh = False
-closing = True
+closing = False
 testing = False  # This will write the output image, closed image and template to files in the "Output" folder.
 # Don't forget to rename the outputs in the bottom of the script, if testing is enabled.
 # -------------------------------
