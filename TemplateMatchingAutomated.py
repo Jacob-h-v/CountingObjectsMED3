@@ -21,6 +21,7 @@ def TemplateMatching(image, processed, template, kernelsize):
 
     rotations = [template, template_90, template_180, template_270]
 
+    rects = []
     for i in range(len(rotations)):
         temp = rotations[i]
 
@@ -30,7 +31,6 @@ def TemplateMatching(image, processed, template, kernelsize):
         threshold = 0.40
         (yCoords, xCoords) = np.where(res >= threshold)
 
-        rects = []
         for (x, y) in zip(xCoords, yCoords):
             rects.append((x, y, x + tW, y + tH))
         print(f"Iteration: {i}: {xCoords}, {yCoords}")
