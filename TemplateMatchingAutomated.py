@@ -11,19 +11,29 @@ input_gray = cv.cvtColor(inputPic, cv.COLOR_BGR2GRAY)
 templateTest = cv.imread("Output/CroppedPicture.jpg", 0)
 
 def TemplateMatching(image, processed, template, kernelsize):
-    #image_gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
     image = np.array(image, dtype=np.uint8)
     processed = np.array(processed, dtype=np.uint8)
     template = np.array(template, dtype=np.uint8)
-    tH, tW = template.shape[:2]
 
-    res = cv.matchTemplate(processed, template, cv.TM_CCOEFF_NORMED)
-    threshold = 0.40
-    (yCoords, xCoords) = np.where(res >= threshold)
+    template_90 = cv.rotate(template, cv.ROTATE_90_CLOCKWISE)
+    template_180 = cv.rotate(template_90, cv.ROTATE_90_CLOCKWISE)
+    template_270 = cv.rotate(template_180, cv.ROTATE_90_CLOCKWISE)
 
-    rects = []
-    for (x, y) in zip(xCoords, yCoords):
-        rects.append((x, y, x + tW, y + tH))
+    rotations = [template, template_90, template_180, template_270]
+
+    for i in range(len(rotations)):
+        temp = rotations[i]
+
+        tH, tW = temp.shape[:2]
+
+        res = cv.matchTemplate(processed, temp, cv.TM_CCOEFF_NORMED)
+        threshold = 0.40
+        (yCoords, xCoords) = np.where(res >= threshold)
+
+        rects = []
+        for (x, y) in zip(xCoords, yCoords):
+            rects.append((x, y, x + tW, y + tH))
+        print(f"Iteration: {i}: {xCoords}, {yCoords}")
 
     pick = non_max_suppression(np.array(rects), 0.1)
     resultAmount = len(pick)
