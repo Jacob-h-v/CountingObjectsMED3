@@ -45,6 +45,7 @@ matchTemplates = True
 # -------------------------------
 
 if resize:
+    print("Resizing image...")
     scale_percent = 50  # percent of original size
     width = int(tempImage.shape[1] * scale_percent / 100)
     height = int(tempImage.shape[0] * scale_percent / 100)
@@ -54,6 +55,7 @@ if resize:
 
 # Grab template coordinates
 if tempCoords:
+    print("Generating template coordinates...")
     template_coords = template_cropping(tempImage)
 
 # tempImage_gray = cv.cvtColor(tempImage, cv.COLOR_BGR2GRAY)
@@ -61,24 +63,28 @@ if tempCoords:
 tempImage = np.array(tempImage, dtype=np.uint8)
 
 # Run median filter
+
 if medianFilter:
+    print("Applying median filter...")
     tempImage = median_filter(tempImage, 3)
     # median_filtered_img = tempImage
 
 # Convolve with gaussian happens here
 if convolve_with_gaussian:
     if newGauss:
+        print("Generating new gaussian kernel...")
         gaussian_kernel = generate_gaussian_kernel(gaussian_radius, 15)
         file = open("savedGauss", "wb")
         np.save(file, gaussian_kernel)
         file.close
-
+    print("Applying gaussian filter...")
     file = open("savedGauss", "rb")
     savedGauss = np.load(file)
     # print(savedGauss)
     image_blurred = convolve(tempImage, savedGauss)
     if adjustImgSize:
         image_resize = tempImage[gaussian_radius:tempImage.shape[0]-gaussian_radius, gaussian_radius:tempImage.shape[1]-gaussian_radius]
+        print("Subtracting blurred image from original...")
         if subtractBlurred:
             tempImage = cv.subtract(image_resize, image_blurred)
             image_subtracted = tempImage
@@ -86,12 +92,14 @@ if convolve_with_gaussian:
 
 # Binary thresholding happens here
 if binaryThresh:
+    print("Applying binary thresholding...")
     ret, tempImage = cv.threshold(tempImage, 25, 255, cv.THRESH_BINARY)
     image_binary = tempImage
 
 
 # Run closing operation
 if closing:
+    print("Running closing operation...")
     tempImage = inbuiltMorphology(tempImage, closing_kernel, OpType.Closing)
     # tempImage = Closing(image_binary, structuring_element_erosion, structuring_element_dilation)
     image_closed = tempImage
@@ -99,15 +107,17 @@ if closing:
 
 # Crop out the selected template using coordinates
 if createTemplate & tempCoords:
+    print("Cropping template...")
     template = crop(tempImage, template_coords[0] - gaussian_radius, template_coords[1] - gaussian_radius, template_coords[2] - gaussian_radius, template_coords[3] - gaussian_radius)
 
 
 # Match template against processed image
 if matchTemplates & createTemplate & tempCoords:
+    print("Running temmplate matching...")
     tempImage, templateMatching_count = TemplateMatching(imageInput, tempImage, template, gaussian_radius)
     # templateMatching_result = tempImage
 
-
+print("Generating image text...")
 tempImage = cv.putText(tempImage, F"{templateMatching_count}", (15, 65), 1, 4, (0, 0, 255), 5, cv.LINE_AA)
 
 # Display images generated along the way
