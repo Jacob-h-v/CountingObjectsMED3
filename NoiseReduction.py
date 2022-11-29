@@ -48,11 +48,15 @@ def median_filter(data, kernel):
 def convolve(image, kernel):
     kernel_size = kernel.shape[0]
     output = np.zeros((image.shape[0] - kernel_size + 1, image.shape[1] - kernel_size + 1, image.shape[2]), dtype=np.uint8)
+
     for y in range(output.shape[0]):
         for x in range(output.shape[1]):
             for z in range(output.shape[2]):
-                slice = image[y:y+kernel_size, x:x+kernel_size]
-                output[y, x, z] = np.sum(slice*kernel)/np.sum(kernel)
+                slice = image[y:y + kernel_size, x:x + kernel_size, z:z + 1]
+                #output[y, x, z] = image[y, x, z]
+                #slice = image[y:y+kernel_size, x:x+kernel_size]
+                #output[y, x, z] = image[y, x, z]
+                output[y, x, z] = np.sum(slice * kernel) / np.sum(kernel)
     return output
 
 def generate_gaussian_kernel(radius, standard_deviation):

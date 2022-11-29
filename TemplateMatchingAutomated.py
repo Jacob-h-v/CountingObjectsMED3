@@ -33,7 +33,7 @@ def TemplateMatching(image, processed, template, kernelsize):
 
         for (x, y) in zip(xCoords, yCoords):
             rects.append((x, y, x + tW, y + tH))
-        print(f"Iteration: {i}: {xCoords}, {yCoords}")
+        # print(f"Iteration: {i}: {xCoords}, {yCoords}")
 
     pick = non_max_suppression(np.array(rects), 0.1)
     resultAmount = len(pick)

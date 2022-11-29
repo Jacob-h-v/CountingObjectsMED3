@@ -13,8 +13,8 @@ imageInput = np.array(imageInput, dtype=np.uint8)
 tempImage = imageInput
 
 # Settings
-gaussian_radius = 30
-newGauss = False
+gaussian_radius = 50
+newGauss = True
 closing_kernel = 5
 structuring_element_erosion = 3
 structuring_element_dilation = [[0, 1, 0], [1, 1, 1], [0, 1, 0]]
@@ -33,8 +33,8 @@ displayMatchingResult = True
 displayClosing = True
 displayTemplate = True
 displayBinaryThresh = False
-displayBlurred = False
-displaySubtracted = False
+displayBlurred = True
+displaySubtracted = True
 # -------------------------------
 # Warning: Modifying these can crash the program
 tempCoords = True
