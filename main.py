@@ -5,6 +5,7 @@ from CroppingTemplate import template_cropping, crop
 from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
+from testie import ManualTemplateMatching
 
 currentImageName = "2P-2L-1P-1CL-3C-16A (1).JPEG"
 currentDirectory = "Puzzle/GreenBackground"
@@ -22,7 +23,7 @@ structuring_element_dilation = [[0, 1, 0], [1, 1, 1], [0, 1, 0]]
 # These can be changed between True / False to include or exclude different types of image processing.
 resize = True
 medianFilter = False
-convolve_with_gaussian = True
+convolve_with_gaussian = False
 binaryThresh = False
 closing = False
 testing = False  # This will write the output image, closed image and template to files in the "Output" folder.
@@ -113,8 +114,9 @@ if createTemplate & tempCoords:
 
 # Match template against processed image
 if matchTemplates & createTemplate & tempCoords:
-    print("Running temmplate matching...")
-    tempImage, templateMatching_count = TemplateMatching(imageInput, tempImage, template, gaussian_radius)
+    print("Running template matching...")
+    # tempImage, templateMatching_count = TemplateMatching(imageInput, tempImage, template, gaussian_radius)
+    tempImage, templateMatching_count = ManualTemplateMatching(imageInput, tempImage, template, gaussian_radius)
     # templateMatching_result = tempImage
 
 print("Generating image text...")
