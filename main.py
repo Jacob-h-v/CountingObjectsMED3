@@ -8,8 +8,8 @@ from Morphology import inbuiltMorphology, OpType, morphology, Closing
 from testie import ManualTemplateMatching
 from PointProcessing import IncreaseCotrast
 
-currentImageName = "2P-2L-1P-1CL-3C-16A (1).JPEG"
-currentDirectory = "Puzzle/GreenBackground"
+currentImageName = "3L-2L-1P-1CL-2C-16A (1).JPEG"
+currentDirectory = "Lego/GreenBackground"
 imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}")
 imageInput = np.array(imageInput, dtype=np.uint8)
 tempImage = imageInput

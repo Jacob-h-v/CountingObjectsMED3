@@ -28,7 +28,7 @@ def TemplateMatching(image, processed, template, kernelsize):
         tH, tW = temp.shape[:2]
 
         res = cv.matchTemplate(processed, temp, cv.TM_CCOEFF_NORMED)
-        threshold = 0.35
+        threshold = 0.6
         (yCoords, xCoords) = np.where(res >= threshold)
 
         for (x, y) in zip(xCoords, yCoords):
@@ -36,7 +36,7 @@ def TemplateMatching(image, processed, template, kernelsize):
         # print(f"Iteration: {i}: {xCoords}, {yCoords}")
         # cv.imshow(f"res{i}", res)
 
-    pick = non_max_suppression(np.array(rects), 0.1)
+    pick = non_max_suppression(np.array(rects), 0.05)
     resultAmount = len(pick)
     print(resultAmount)
 
