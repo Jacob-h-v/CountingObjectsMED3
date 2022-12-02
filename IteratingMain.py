@@ -1,5 +1,6 @@
 import cv2 as cv
 import numpy as np
+import os
 
 from CroppingTemplate import template_cropping, crop
 from TemplateMatchingAutomated import TemplateMatching
@@ -29,17 +30,17 @@ convolve_with_gaussian = True
 applyContrast = True
 binaryThresh = False
 closing = False
-testing = True  # This will write the output image, closed image and template to files in the "Output" folder.
+testing = False  # This will write the output image, closed image and template to files in the "Output" folder.
 # Don't forget to rename the outputs in the bottom of the script, if testing is enabled.
 # -------------------------------
 # What to display after the program runs
 displayMatchingResult = True
-displayClosing = False
+displayClosing = True
 displayTemplate = True
 displayBinaryThresh = False
-displayBlurred = False
-displaySubtracted = False
-displayContrast = False
+displayBlurred = True
+displaySubtracted = True
+displayContrast = True
 # -------------------------------
 # Warning: Modifying these can crash the program
 tempCoords = True
@@ -152,8 +153,8 @@ if closing & displayClosing:
     cv.imshow("Closed", image_closed)
 
 if testing:
-    cv.imwrite(F'Output/{currentDirectory}/Test2-{currentImageName}_result.png', tempImage)
-    cv.imwrite(F'Output/{currentDirectory}/Test2-{currentImageName}_final.png', contrasted)
-    cv.imwrite(F'Output/{currentDirectory}/Test2-{currentImageName}_template.png', template)
+    cv.imwrite(F'Output/{currentDirectory}/Test1-{currentImageName}_result.png', tempImage)
+    cv.imwrite(F'Output/{currentDirectory}/Test1-{currentImageName}_final.png', image_closed)
+    cv.imwrite(F'Output/{currentDirectory}/Test1-{currentImageName}_template.png', template)
 
 cv.waitKey(0)
