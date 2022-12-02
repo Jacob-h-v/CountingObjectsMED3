@@ -152,8 +152,8 @@ if closing & displayClosing:
     cv.imshow("Closed", image_closed)
 
 if testing:
-    cv.imwrite(F'Output/{currentDirectory}/Test2-{currentImageName}_result.png', tempImage)
-    cv.imwrite(F'Output/{currentDirectory}/Test2-{currentImageName}_final.png', contrasted)
-    cv.imwrite(F'Output/{currentDirectory}/Test2-{currentImageName}_template.png', template)
+    cv.imwrite(F'Output/Test2/{currentDirectory}/{currentImageName}_result.png', tempImage)
+    cv.imwrite(F'Output/Test2/{currentDirectory}/{currentImageName}_final.png', contrasted)
+    cv.imwrite(F'Output/Test2/{currentDirectory}/{currentImageName}_template.png', template)
 
 cv.waitKey(0)
