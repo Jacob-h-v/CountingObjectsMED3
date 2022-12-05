@@ -5,36 +5,41 @@ from CroppingTemplate import template_cropping, crop
 from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
+from testie import ManualTemplateMatching
+from PointProcessing import IncreaseCotrast
 
-currentImageName = "2P-2L-1P-1CL-3C-16A (1).JPEG"
-currentDirectory = "Puzzle/GreenBackground"
+currentImageName = "3L-2L-1P-1CL-2C-16A (1).JPEG"
+currentDirectory = "Lego/GreenBackground"
 imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}")
 imageInput = np.array(imageInput, dtype=np.uint8)
 tempImage = imageInput
 
 # Settings
-gaussian_radius = 30
-newGauss = False
+gaussian_radius = 20
+newGauss = True
 closing_kernel = 5
 structuring_element_erosion = 3
 structuring_element_dilation = [[0, 1, 0], [1, 1, 1], [0, 1, 0]]
+contrast_multiplier = 2
 
 # These can be changed between True / False to include or exclude different types of image processing.
 resize = True
 medianFilter = False
 convolve_with_gaussian = True
+applyContrast = True
 binaryThresh = False
 closing = False
-testing = False  # This will write the output image, closed image and template to files in the "Output" folder.
+testing = True  # This will write the output image, closed image and template to files in the "Output" folder.
 # Don't forget to rename the outputs in the bottom of the script, if testing is enabled.
 # -------------------------------
 # What to display after the program runs
 displayMatchingResult = True
-displayClosing = True
+displayClosing = False
 displayTemplate = True
 displayBinaryThresh = False
 displayBlurred = False
 displaySubtracted = False
+displayContrast = False
 # -------------------------------
 # Warning: Modifying these can crash the program
 tempCoords = True
@@ -89,6 +94,9 @@ if convolve_with_gaussian:
             tempImage = cv.subtract(image_resize, image_blurred)
             image_subtracted = tempImage
 
+if applyContrast:
+    tempImage = IncreaseCotrast(tempImage, contrast_multiplier)
+    contrasted = tempImage
 
 # Binary thresholding happens here
 if binaryThresh:
@@ -113,8 +121,9 @@ if createTemplate & tempCoords:
 
 # Match template against processed image
 if matchTemplates & createTemplate & tempCoords:
-    print("Running temmplate matching...")
+    print("Running template matching...")
     tempImage, templateMatching_count = TemplateMatching(imageInput, tempImage, template, gaussian_radius)
+    # tempImage, templateMatching_count = ManualTemplateMatching(imageInput, tempImage, template, gaussian_radius)
     # templateMatching_result = tempImage
 
 print("Generating image text...")
@@ -126,6 +135,9 @@ if convolve_with_gaussian:
         cv.imshow("blur", image_blurred)
     if displaySubtracted:
         cv.imshow("Subtracted", image_subtracted)
+
+if applyContrast & displayContrast:
+    cv.imshow("Contrast", contrasted)
 
 if binaryThresh & displayBinaryThresh:
     cv.imshow("Binary", image_binary)
@@ -140,8 +152,8 @@ if closing & displayClosing:
     cv.imshow("Closed", image_closed)
 
 if testing:
-    cv.imwrite(F'Output/{currentDirectory}/Test1-{currentImageName}_result.png', tempImage)
-    cv.imwrite(F'Output/{currentDirectory}/Test1-{currentImageName}_final.png', image_closed)
-    cv.imwrite(F'Output/{currentDirectory}/Test1-{currentImageName}_template.png', template)
+    cv.imwrite(F'Output/Test2/{currentDirectory}/{currentImageName}_result.png', tempImage)
+    cv.imwrite(F'Output/Test2/{currentDirectory}/{currentImageName}_final.png', contrasted)
+    cv.imwrite(F'Output/Test2/{currentDirectory}/{currentImageName}_template.png', template)
 
 cv.waitKey(0)

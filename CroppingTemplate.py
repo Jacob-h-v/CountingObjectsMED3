@@ -57,8 +57,14 @@ def crop(image, x_start, y_start, x_end, y_end):
     refPoint = [(x_start, y_start), (x_end, y_end)]
     if len(refPoint) == 2:  # when two points were found
         roi = oriImage[refPoint[0][1]:refPoint[1][1], refPoint[0][0]:refPoint[1][0]]
-        cv.imwrite('Output/CroppedPicture.jpg', roi)
+        # cv.imwrite('Output/CroppedPicture.jpg', roi)
     return roi
+
+def combinedCrop(image):
+    tempCoords = template_cropping(image)
+    template = crop(image, tempCoords[0], tempCoords[1], tempCoords[2], tempCoords[3])
+
+    return template
 
 #croppedPic = template_cropping(image)
 #print(croppedPic)

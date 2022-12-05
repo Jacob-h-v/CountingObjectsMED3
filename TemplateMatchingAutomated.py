@@ -28,21 +28,22 @@ def TemplateMatching(image, processed, template, kernelsize):
         tH, tW = temp.shape[:2]
 
         res = cv.matchTemplate(processed, temp, cv.TM_CCOEFF_NORMED)
-        threshold = 0.40
+        threshold = 0.6
         (yCoords, xCoords) = np.where(res >= threshold)
 
         for (x, y) in zip(xCoords, yCoords):
             rects.append((x, y, x + tW, y + tH))
-        print(f"Iteration: {i}: {xCoords}, {yCoords}")
+        # print(f"Iteration: {i}: {xCoords}, {yCoords}")
+        # cv.imshow(f"res{i}", res)
 
-    pick = non_max_suppression(np.array(rects), 0.1)
+    pick = non_max_suppression(np.array(rects), 0.05)
     resultAmount = len(pick)
     print(resultAmount)
 
     # loop over the final bounding boxes
     for (startX, startY, endX, endY) in pick:
         # draw the bounding box on the image
-        cv.rectangle(image, (startX + kernelsize, startY + kernelsize//2), (endX + kernelsize, endY + kernelsize//2),
+        cv.rectangle(image, (startX + kernelsize, startY + kernelsize), (endX + kernelsize, endY + kernelsize),
                       (0, 0, 255), 3)
     # show the output image
     return image, resultAmount
