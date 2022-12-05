@@ -1,3 +1,9 @@
+# Source:
+# Daniel Shiffman
+# http://codingtra.in
+# http://patreon.com/codingtrain
+# Code for: https://youtu.be/1scFcY-xMrI
+
 import numpy as np
 
 
