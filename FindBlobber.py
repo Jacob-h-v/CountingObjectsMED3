@@ -30,7 +30,7 @@ def find_blobs(image, trackColor, minSize):
    redTrack = trackColor[2]
    for y in range(image.shape[0]):
        for x in range (image.shape[1]):
-           tempLocation = (y, x)
+           # tempLocation = (y, x)
            blue = image[y, x, 0]
            green = image[y, x, 1]
            red = image[y, x, 2]

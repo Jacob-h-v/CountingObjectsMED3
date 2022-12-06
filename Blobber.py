@@ -22,6 +22,7 @@ class Blob:
         self.maxY = 0
         self.points = []
         self.maxDistance = 5
+        return
 
     def new_blob(self, y, x, distanceThreshold):
         self.minX = x
@@ -31,6 +32,7 @@ class Blob:
         self.points.append((y, x))
         self.maxDistance = distanceThreshold
         print(f"New blob added. minX: {self.minX}, minY: {self.minY}, maxX: {self.maxX}, maxY: {self.maxY}")
+        return
 
     def add_point(self, y, x):
         self.points.append((y, x))
@@ -39,6 +41,7 @@ class Blob:
         self.maxX = max(self.maxX, x)
         self.maxY = max(self.maxY, y)
         print(f"New point added to a blob. minX: {self.minX}, minY: {self.minY}, maxX: {self.maxX}, maxY: {self.maxY}")
+        return
 
     def blob_size(self):
         return (self.maxX-self.minX)*(self.maxY-self.minY)
@@ -53,6 +56,7 @@ class Blob:
             print(tempDist)
             if tempDist < d:
                 d = tempDist
+        return
 
         if d < (maxDistance * maxDistance):
             return True
