@@ -5,10 +5,6 @@ import numpy as np
 
 def BinaryThreshold(input_image, threshold):
     output_image = np.zeros(input_image.shape, dtype=input_image.dtype)
-    #threshold = 25
-
-    #template = [template_coordinates[0] - gaussian_radius, template_coordinates[1] - gaussian_radius, template_coordinates[2] - gaussian_radius,
-    #template_coordinates[3] - gaussian_radius]
 
     for y, row in enumerate(input_image):
         for x, pixel in enumerate(row):

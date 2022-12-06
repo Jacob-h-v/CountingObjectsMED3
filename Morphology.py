@@ -10,14 +10,14 @@ class OpType(Enum):
     Closing = auto()
 
 
-img = cv.imread('Resources/1M-2L-1P-1CL-1C (1).png')
+#img = cv.imread('Resources/1M-2L-1P-1CL-1C (1).png')
 
 # Using OpenCV Functions
 def inbuiltMorphology(image_binary, kernel_size, operation):
     # image_gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     # ret, image_binary = cv.threshold(image_gray, 127, 255, cv.THRESH_BINARY)
 
-    kernel_size = 3
+    #kernel_size = 3
     kernel = np.ones((kernel_size, kernel_size), np.uint8)
 
     if operation == OpType.Erosion:
@@ -32,15 +32,10 @@ def inbuiltMorphology(image_binary, kernel_size, operation):
     return output
 
 # Using manual nested loops * UNDER CONSTRUCTION *
-def morphology(img, kernel_size, operation):
-    image_normalized = cv.normalize(img, None, 0, 255, cv.NORM_MINMAX, dtype=cv.CV_8U)
-    #image_gray = cv.cvtColor(image_normalized, cv.COLOR_BGR2GRAY)
-   #image_arr = np.array(image_gray)
-    ret, image_binary = cv.threshold(image_normalized, 127, 255, cv.THRESH_BINARY)
+def morphology(image_binary, kernel_size, operation):
 
-    kernel_size = kernel_size
     kernel_radius = kernel_size//2
-    true_value = np.max(img)
+    true_value = np.max(image_binary)
     kernel = np.zeros((kernel_size, kernel_size))*true_value
 
     # Output billedet bliver mindre end inputtet da den fjerner kernel radius i hver side
@@ -48,7 +43,7 @@ def morphology(img, kernel_size, operation):
 
     for y in range(output.shape[0]):
         for x in range(output.shape[1]):
-            roi = img[y:y+kernel_size, x:x+kernel_size]
+            roi = image_binary[y:y+kernel_size, x:x+kernel_size]
             # Dilation
             if operation == OpType.Dilation and (roi == kernel).any():
                 output[y, x] = true_value

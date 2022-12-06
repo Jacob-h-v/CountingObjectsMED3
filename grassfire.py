@@ -2,17 +2,6 @@ from collections import deque
 import numpy as np
 import cv2 as cv
 
-img = cv.imread("shapes.png", cv.IMREAD_GRAYSCALE)
-
-
-'''img = np.array([[0, 0, 0, 255, 255, 255],
-               [0, 0, 0, 0, 255, 0],
-               [0, 0, 0, 0, 255, 0],
-               [0, 0, 255, 255, 0, 0],
-               [0, 0, 255, 255, 0, 0],
-               [0, 0, 255, 255, 0, 0]], dtype=np.uint8)'''
-
-
 def ignite_pixel(image, coordinate, id):
     y, x = coordinate
     burn_queue = deque()
@@ -35,10 +24,6 @@ def ignite_pixel(image, coordinate, id):
             if y - 1 >= 0 and image[y - 1, x] == 255:
                 burn_queue.append((y - 1, x))
 
-        #print(image)
-        #print(burn_queue)
-        #input()
-
         if len(burn_queue) == 0:
             return id + 50
 
@@ -50,9 +35,3 @@ def grassfire(image):
     for y, row in enumerate(image):
         for x, pixel in enumerate(row):
             next_id = ignite_pixel(image, (y, x), next_id)
-
-grassfire(img)
-
-#print(img)
-cv.imshow("Output", img)
-cv.waitKey()
