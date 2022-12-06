@@ -8,9 +8,10 @@ from Morphology import inbuiltMorphology, OpType, morphology, Closing
 from testie import ManualTemplateMatching
 from PointProcessing import IncreaseContrast
 from BinaryThreshold import BinaryThreshold, BitsuThreshold
+from grassfire import grassfire
 
-currentImageName = "3L-3L-1P-1CL-2C-16A (3).jpg"
-currentDirectory = "Lego/MultiColorBackground"
+currentImageName = "1M-2L-1P-1CL-1C_(1)(1).jpg"
+currentDirectory = "Coins/NormalBackground"
 imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}")
 imageInput = np.array(imageInput, dtype=np.uint8)
 tempImage = imageInput
@@ -30,6 +31,7 @@ convolve_with_gaussian = True
 applyContrast = True
 binaryThresh = True
 closing = True
+grassfired = True
 testing = False  # This will write the output image, closed image and template to files in the "Output" folder.
 # Don't forget to rename the outputs in the bottom of the script, if testing is enabled.
 # -------------------------------
@@ -41,6 +43,7 @@ displayBinaryThresh = True
 displayBlurred = False
 displaySubtracted = True
 displayContrast = False
+displayGrassfire = True
 # -------------------------------
 # Warning: Modifying these can crash the program
 tempCoords = True
@@ -117,7 +120,7 @@ if closing:
     print("Running morphology operation...")
     # tempImage = morphology(tempImage, 5, OpType.Erosion)
 
-    tempImage = inbuiltMorphology(tempImage, 3, OpType.Erosion)
+    #tempImage = inbuiltMorphology(tempImage, 3, OpType.Erosion)
 
     # Closing
     tempImage = inbuiltMorphology(tempImage, 7, OpType.Dilation)
@@ -130,6 +133,10 @@ if closing:
     # tempImage = Closing(image_binary, structuring_element_erosion, structuring_element_dilation)
     image_closed = tempImage
 
+if grassfired:
+    grassfire(tempImage)
+    np.array(tempImage).dtype=np.uint8
+    image_grassfire = tempImage
 
 # Crop out the selected template using coordinates
 if createTemplate & tempCoords:
@@ -167,6 +174,9 @@ if createTemplate & matchTemplates & tempCoords & displayMatchingResult:
 
 if closing & displayClosing:
     cv.imshow("Morphology", image_closed)
+
+if grassfired & displayGrassfire:
+    cv.imshow("Grassfire", image_grassfire)
 
 if testing:
     cv.imwrite(F'Output/Test2/{currentDirectory}/{currentImageName}_result.png', tempImage)
