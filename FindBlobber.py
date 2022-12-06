@@ -28,6 +28,11 @@ def find_blobs(image, trackColor, minSize):
    blueTrack = trackColor[0]
    greenTrack = trackColor[1]
    redTrack = trackColor[2]
+   blobSize = 0
+   xmin = 0
+   xmax = 0
+   ymin = 0
+   ymax = 0
    for y in range(image.shape[0]):
        for x in range (image.shape[1]):
            # tempLocation = (y, x)
@@ -52,7 +57,7 @@ def find_blobs(image, trackColor, minSize):
        if Blobber.Blob.blob_size(blob) > minSize:
            blobSize = Blobber.Blob.blob_size(Blobber.Blob)
            xmin, ymin, xmax, ymax = Blobber.Blob.get_blob_coords(Blobber.Blob)
-           return blobSize, xmin, ymin, xmax, ymax
+   return blobSize, xmin, ymin, xmax, ymax
 
 
 
@@ -60,3 +65,4 @@ def find_blobs(image, trackColor, minSize):
 
 testSize, xmin, ymin, xmax, ymax = find_blobs(imageInput, (50, 20, 20), 50)
 print(testSize, xmin, ymin, xmax, ymax)
+print(Blobbies)
