@@ -3,7 +3,7 @@ import numpy as np
 
 #testImage1 = cv.imread("Resources/JPEGbilleder/Coins/NormalBackground/1M-2L-1P-1CL-1C_(1)(1).jpg")
 
-def IncreaseCotrast(image, contrast_amount):
+def IncreaseContrast(image, contrast_amount):
     output = image.copy()
     for y in range(output.shape[0]):
         for x in range(output.shape[1]):

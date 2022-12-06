@@ -6,9 +6,9 @@ from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
 from testie import ManualTemplateMatching
-from PointProcessing import IncreaseCotrast
+from PointProcessing import IncreaseContrast
 
-currentImageName = "3L-2L-1P-1CL-2C-16A (1).JPEG"
+currentImageName = "3L-3L-2P-3CL-2C-20A (1).JPEG"
 currentDirectory = "Lego/GreenBackground"
 imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}")
 imageInput = np.array(imageInput, dtype=np.uint8)
@@ -95,7 +95,7 @@ if convolve_with_gaussian:
             image_subtracted = tempImage
 
 if applyContrast:
-    tempImage = IncreaseCotrast(tempImage, contrast_multiplier)
+    tempImage = IncreaseContrast(tempImage, contrast_multiplier)
     contrasted = tempImage
 
 # Binary thresholding happens here

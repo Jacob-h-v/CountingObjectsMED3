@@ -6,10 +6,11 @@ from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
 from testie import ManualTemplateMatching
-from PointProcessing import IncreaseCotrast
+from PointProcessing import IncreaseContrast
 from BinaryThreshold import BinaryThreshold, BitsuThreshold
+from grassfire import grassfire
 
-currentImageName = "1M-2L-1P-1CL-3C(1).jpg"
+currentImageName = "1M-2L-1P-1CL-1C_(1)(1).jpg"
 currentDirectory = "Coins/NormalBackground"
 imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}")
 imageInput = np.array(imageInput, dtype=np.uint8)
@@ -30,17 +31,19 @@ convolve_with_gaussian = True
 applyContrast = True
 binaryThresh = True
 closing = True
+grassfired = True
 testing = False  # This will write the output image, closed image and template to files in the "Output" folder.
 # Don't forget to rename the outputs in the bottom of the script, if testing is enabled.
 # -------------------------------
 # What to display after the program runs
 displayMatchingResult = True
-displayClosing = False
+displayClosing = True
 displayTemplate = True
 displayBinaryThresh = True
 displayBlurred = False
 displaySubtracted = True
 displayContrast = False
+displayGrassfire = True
 # -------------------------------
 # Warning: Modifying these can crash the program
 tempCoords = True
@@ -96,7 +99,7 @@ if convolve_with_gaussian:
             image_subtracted = tempImage
 
 if applyContrast:
-    tempImage = IncreaseCotrast(tempImage, contrast_multiplier)
+    tempImage = IncreaseContrast(tempImage, contrast_multiplier)
     contrasted = tempImage
 
 # Binary thresholding happens here
@@ -107,18 +110,33 @@ if binaryThresh:
     #tempImage = cv.adaptiveThreshold(tempImage, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 251, 2)
     #ret, tempImage = cv.threshold(tempImage, 25, 255, cv.THRESH_BINARY)
     biThresh = BitsuThreshold(tempImage)
-    print(biThresh)
+    print(f"Bitsu Threshold: {biThresh}")
     tempImage = BinaryThreshold(tempImage, biThresh)
     image_binary = tempImage
 
 
 # Run closing operation
 if closing:
-    print("Running closing operation...")
-    tempImage = inbuiltMorphology(tempImage, closing_kernel, OpType.Closing)
+    print("Running morphology operation...")
+    # tempImage = morphology(tempImage, 5, OpType.Erosion)
+
+    #tempImage = inbuiltMorphology(tempImage, 3, OpType.Erosion)
+
+    # Closing
+    tempImage = inbuiltMorphology(tempImage, 7, OpType.Dilation)
+    tempImage = inbuiltMorphology(tempImage, 7, OpType.Erosion)
+
+    # Opening
+    tempImage = inbuiltMorphology(tempImage, 7, OpType.Erosion)
+    tempImage = inbuiltMorphology(tempImage, 7, OpType.Dilation)
+
     # tempImage = Closing(image_binary, structuring_element_erosion, structuring_element_dilation)
     image_closed = tempImage
 
+if grassfired:
+    grassfire(tempImage)
+    np.array(tempImage).dtype=np.uint8
+    image_grassfire = tempImage
 
 # Crop out the selected template using coordinates
 if createTemplate & tempCoords:
@@ -155,7 +173,10 @@ if createTemplate & matchTemplates & tempCoords & displayMatchingResult:
     cv.imshow("template matching", tempImage)
 
 if closing & displayClosing:
-    cv.imshow("Closed", image_closed)
+    cv.imshow("Morphology", image_closed)
+
+if grassfired & displayGrassfire:
+    cv.imshow("Grassfire", image_grassfire)
 
 if testing:
     cv.imwrite(F'Output/Test2/{currentDirectory}/{currentImageName}_result.png', tempImage)
