@@ -8,12 +8,13 @@ import numpy as np
 
 
 class Blob:
-    minX = 1920
-    minY = 1080
+    minX = 0
+    minY = 0
     maxX = 0
     maxY = 0
     points = []
     maxDistance = 5
+
     def __init__(self):
         self.minX = 0
         self.minY = 0
@@ -29,7 +30,7 @@ class Blob:
         self.maxY = y
         self.points.append((y, x))
         self.maxDistance = distanceThreshold
-        print(self.points)
+        print(f"New blob added. minX: {self.minX}, minY: {self.minY}, maxX: {self.maxX}, maxY: {self.maxY}")
 
     def add_point(self, y, x):
         self.points.append((y, x))
@@ -37,6 +38,7 @@ class Blob:
         self.minY = min(self.minY, y)
         self.maxX = max(self.maxX, x)
         self.maxY = max(self.maxY, y)
+        print(f"New point added to a blob. minX: {self.minX}, minY: {self.minY}, maxX: {self.maxX}, maxY: {self.maxY}")
 
     def blob_size(self):
         return (self.maxX-self.minX)*(self.maxY-self.minY)
@@ -54,8 +56,10 @@ class Blob:
 
         if d < (maxDistance * maxDistance):
             return True
+            print("'is_near' returned True")
         else:
             return False
+            print("'is_near' returned False")
 
 
 
