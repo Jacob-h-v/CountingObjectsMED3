@@ -9,8 +9,9 @@ from testie import ManualTemplateMatching
 from PointProcessing import IncreaseContrast
 from BinaryThreshold import BinaryThreshold, BitsuThreshold
 from grassfire import grassfire
+from BlobClassification import RemoveEdgeBlobs
 
-currentImageName = "1M-2L-1P-1CL-1C_(1)(1).jpg"
+currentImageName = "1M-2L-1P-1CL-3C(6).jpg"
 currentDirectory = "Coins/NormalBackground"
 imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}")
 imageInput = np.array(imageInput, dtype=np.uint8)
@@ -134,9 +135,14 @@ if closing:
     image_closed = tempImage
 
 if grassfired:
+    print("Running grassfire algorithm...")
     grassfire(tempImage)
     np.array(tempImage).dtype=np.uint8
     image_grassfire = tempImage
+
+    print("Removing Edge Blobs...")
+    tempImage = RemoveEdgeBlobs(tempImage)
+    image_edgeblobs = tempImage
 
 # Crop out the selected template using coordinates
 if createTemplate & tempCoords:
