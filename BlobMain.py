@@ -7,9 +7,10 @@ from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
 from testie import ManualTemplateMatching
 from PointProcessing import IncreaseCotrast
+from BinaryThreshold import BinaryThreshold, BitsuThreshold
 
-currentImageName = "3L-2L-1P-1CL-2C-16A (1).JPEG"
-currentDirectory = "Lego/GreenBackground"
+currentImageName = "1M-2L-1P-1CL-3C(1).jpg"
+currentDirectory = "Coins/NormalBackground"
 imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}")
 imageInput = np.array(imageInput, dtype=np.uint8)
 tempImage = imageInput
@@ -104,7 +105,10 @@ if binaryThresh:
     tempImage = cv.cvtColor(tempImage, cv.COLOR_BGR2GRAY)
     cv.imshow("grey", tempImage)
     #tempImage = cv.adaptiveThreshold(tempImage, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 251, 2)
-    ret, tempImage = cv.threshold(tempImage, 40, 255, cv.THRESH_BINARY)
+    #ret, tempImage = cv.threshold(tempImage, 25, 255, cv.THRESH_BINARY)
+    biThresh = BitsuThreshold(tempImage)
+    print(biThresh)
+    tempImage = BinaryThreshold(tempImage, biThresh)
     image_binary = tempImage
 
 
