@@ -15,17 +15,17 @@ class Blob:
     points = []
     maxDistance = 5
 
-    def new_blob(self, x, y, distanceThreshold):
+    def new_blob(self, y, x, distanceThreshold):
         self.minX = x
         self.minY = y
         self.maxX = x
         self.maxY = y
-        self.points.append((x, y))
+        self.points.append((y, x))
         self.maxDistance = distanceThreshold
         print(self.points)
 
-    def add_point(self, x, y):
-        self.points.append((x, y))
+    def add_point(self, y, x):
+        self.points.append((y, x))
         self.minX = min(self.minX, x)
         self.minY = min(self.minY, y)
         self.maxX = max(self.maxX, x)
@@ -37,7 +37,7 @@ class Blob:
     def get_blob_coords(self):
         return self.minX, self.minY, self.maxX, self.maxY
 
-    def is_near(self, x, y, maxDistance):
+    def is_near(self, y, x, maxDistance):
         d = 1000000
         for i in range(0, len(self.points)):
             tempDist = np.sum(np.square(np.subtract((x, y), (self.points[i]))))
