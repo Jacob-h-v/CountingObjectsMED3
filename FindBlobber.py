@@ -11,10 +11,10 @@ import numpy as np
 
 imageInput = cv.imread("Output/Test2/Lego/GreenBackground/3L-2L-1P-1CL-2C-16A (3).JPEG_final.png")
 trackColor = (0, 0, 255)
-threshold = 25
+threshold = 100
 distanceThreshold = 50
 
-Blobbies = list<Blobber.Blob>[]
+Blobbies = []
 
 def setup(image, color):
     global trackColor
@@ -30,7 +30,7 @@ def find_blobs(image, trackColor, minSize):
    redTrack = trackColor[2]
    for y in range(image.shape[0]):
        for x in range (image.shape[1]):
-           tempLocation = (y, x)
+           # tempLocation = (y, x)
            blue = image[y, x, 0]
            green = image[y, x, 1]
            red = image[y, x, 2]
@@ -39,23 +39,24 @@ def find_blobs(image, trackColor, minSize):
            if(tempDist < threshold & threshold):
                found = False
                for Blob in Blobbies:
-                   if(Blobber.Blob.is_near(y, x)):
+                   if(Blobber.Blob.is_near(Blobber.Blob, y, x, 25)):
                        Blobber.Blob.add_point(Blobber.Blob, y, x)
                        found = True
                        break
 
                if not found:
-                   Blob = Blobber.Blob.new_blob(Blobber.Blob, y, x)
+                   Blob = Blobber.Blob.new_blob(Blobber.Blob, y, x, 25)
                    Blobbies.append(Blob)
 
-   for Blobber.Blob in Blobbies:
-       if Blobber.Blob.blob_size(Blobber.Blob) > minSize:
+   for blob in Blobbies:
+       if Blobber.Blob.blob_size(blob) > minSize:
            blobSize = Blobber.Blob.blob_size(Blobber.Blob)
-           blobLocation = Blobber.Blob.get_blob_coords(Blobber.Blob)
-           return blobSize, blobLocation
+           xmin, ymin, xmax, ymax = Blobber.Blob.get_blob_coords(Blobber.Blob)
+           return blobSize, xmin, ymin, xmax, ymax
 
 
 
 
 
-test = find_blobs(imageInput)
+testSize, xmin, ymin, xmax, ymax = find_blobs(imageInput, (50, 20, 20), 50)
+print(testSize, xmin, ymin, xmax, ymax)
