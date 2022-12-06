@@ -8,12 +8,19 @@ import numpy as np
 
 
 class Blob:
-    minX = 0
-    minY = 0
+    minX = 1920
+    minY = 1080
     maxX = 0
     maxY = 0
     points = []
     maxDistance = 5
+    def __init__(self):
+        self.minX = 0
+        self.minY = 0
+        self.maxX = 0
+        self.maxY = 0
+        self.points = []
+        self.maxDistance = 5
 
     def new_blob(self, y, x, distanceThreshold):
         self.minX = x
@@ -67,6 +74,6 @@ class Blob:
 
 
 
-Blob.new_blob(Blob, 5, 8)
-Blob.add_point(Blob, 5, 6)
-Blob.is_near(Blob, 5, 6)
+# Blob.new_blob(Blob, 5, 8)
+# Blob.add_point(Blob, 5, 6)
+# Blob.is_near(Blob, 5, 6)
