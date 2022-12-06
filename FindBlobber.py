@@ -51,7 +51,7 @@ def find_blobs(image, trackColor, minSize):
 
                if not found:
                    Blob = Blobber.Blob.new_blob(Blobber.Blob, y, x, 25)
-                   Blobbies.append(Blob)
+                   Blobbies.append(Blobber.Blob)
 
    for blob in Blobbies:
        if Blobber.Blob.blob_size(blob) > minSize:
