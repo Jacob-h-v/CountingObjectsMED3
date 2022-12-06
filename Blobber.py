@@ -16,47 +16,43 @@ class Blob:
     maxDistance = 5
 
     def __init__(self):
-        self.minX = 0
-        self.minY = 0
-        self.maxX = 0
-        self.maxY = 0
-        self.points = []
-        self.maxDistance = 5
-        return
+        Blob.minX = 0
+        Blob.minY = 0
+        Blob.maxX = 0
+        Blob.maxY = 0
+        Blob.points = []
+        Blob.maxDistance = 5
 
     def new_blob(self, y, x, distanceThreshold):
-        self.minX = x
-        self.minY = y
-        self.maxX = x
-        self.maxY = y
-        self.points.append((y, x))
-        self.maxDistance = distanceThreshold
-        print(f"New blob added. minX: {self.minX}, minY: {self.minY}, maxX: {self.maxX}, maxY: {self.maxY}")
-        return
+        Blob.minX = x
+        Blob.minY = y
+        Blob.maxX = x
+        Blob.maxY = y
+        Blob.points.append((y, x))
+        Blob.maxDistance = distanceThreshold
+        # print(f"New blob added. minX: {self.minX}, minY: {self.minY}, maxX: {self.maxX}, maxY: {self.maxY}")
 
     def add_point(self, y, x):
-        self.points.append((y, x))
-        self.minX = min(self.minX, x)
-        self.minY = min(self.minY, y)
-        self.maxX = max(self.maxX, x)
-        self.maxY = max(self.maxY, y)
-        print(f"New point added to a blob. minX: {self.minX}, minY: {self.minY}, maxX: {self.maxX}, maxY: {self.maxY}")
-        return
+        Blob.points.append((y, x))
+        Blob.minX = min(Blob.minX, x)
+        Blob.minY = min(Blob.minY, y)
+        Blob.maxX = max(Blob.maxX, x)
+        Blob.maxY = max(Blob.maxY, y)
+        # print(f"New point added to a blob. minX: {self.minX}, minY: {self.minY}, maxX: {self.maxX}, maxY: {self.maxY}")
 
     def blob_size(self):
-        return (self.maxX-self.minX)*(self.maxY-self.minY)
+        return (Blob.maxX-Blob.minX)*(Blob.maxY-Blob.minY)
 
     def get_blob_coords(self):
-        return self.minX, self.minY, self.maxX, self.maxY
+        return Blob.minX, Blob.minY, Blob.maxX, Blob.maxY
 
     def is_near(self, y, x, maxDistance):
         d = 1000000
-        for i in range(0, len(self.points)):
-            tempDist = np.sum(np.square(np.subtract((x, y), (self.points[i]))))
+        for i in range(0, len(Blob.points)):
+            tempDist = np.sum(np.square(np.subtract((x, y), (Blob.points[i]))))
             print(tempDist)
             if tempDist < d:
                 d = tempDist
-        return
 
         if d < (maxDistance * maxDistance):
             return True
