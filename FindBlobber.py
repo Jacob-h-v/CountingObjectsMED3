@@ -10,9 +10,9 @@ import cv2 as cv
 import numpy as np
 
 imageInput = cv.imread("Output/Test2/Lego/GreenBackground/3L-2L-1P-1CL-2C-16A (3).JPEG_final.png")
-trackColor = (0, 0, 255)
-threshold = 100
-distanceThreshold = 50
+trackColor = (20, 20, 100)
+threshold = 70
+distanceThreshold = 10
 
 Blobbies = []
 
