@@ -13,3 +13,25 @@ def RemoveEdgeBlobs(grassfire_image):
                                 grassfire_image[z, i] = 0
 
     return grassfire_image
+
+def CategorizeFeatures(input_image):
+    blobID = 0
+    Blobs = []
+    PreviousIDs = []
+
+    for y in range(input_image.shape[0]):
+        for x in range(input_image.shape[1]):
+            if input_image[y, x] != 0:
+                if PreviousIDs.count(input_image[y, x]) == 0:
+                    blobID = blobID + 1
+                    blobSize = 0
+                    currentID = input_image[y, x]
+                    for z in range(input_image.shape[0]):
+                        for i in range(input_image.shape[1]):
+                            if input_image[z, i] == currentID:
+                                blobSize = blobSize + 1
+                    PreviousIDs.append(currentID)
+                    Blob = [currentID, blobSize]
+                    Blobs.append(Blob)
+
+    return Blobs
