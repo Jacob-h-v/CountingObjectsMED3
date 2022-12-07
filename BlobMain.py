@@ -9,7 +9,7 @@ from testie import ManualTemplateMatching
 from PointProcessing import IncreaseContrast
 from BinaryThreshold import BinaryThreshold, BitsuThreshold
 from grassfire import grassfire
-from BlobClassification import RemoveEdgeBlobs, CategorizeFeatures
+from BlobClassification import RemoveEdgeBlobs, CategorizeFeatures, DefineTemplateFeatures
 from DrawBoxes import DrawBlobBox
 
 currentImageName = "2P-2L-1P-1CL-3C-16A (1).JPEG"
@@ -148,7 +148,11 @@ if grassfired:
 
     print("Categorizing Blobs...")
     Blobs = CategorizeFeatures(tempImage)
-    print(Blobs)
+    print(f"All Blobs: {Blobs}")
+
+    print("Finding Template Features...")
+    template_features = DefineTemplateFeatures(tempImage, template_coords, gaussian_radius)
+    print(f"Template Blob: {template_features}")
     # blobBoxesGrassfire = DrawBlobBox(tempImage, Blobs, gaussian_radius)
 
 # Crop out the selected template using coordinates

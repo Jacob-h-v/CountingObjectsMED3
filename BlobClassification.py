@@ -51,3 +51,26 @@ def CategorizeFeatures(input_image):
                     Blobs.append(Blob)
 
     return Blobs
+
+def DefineTemplateFeatures(input_image, template_coordinates, kernel_size):
+    oriImage = input_image.copy()
+    refPoint = [(template_coordinates[0] - kernel_size, template_coordinates[1] - kernel_size), (template_coordinates[2] - kernel_size, template_coordinates[3] - kernel_size)]
+    if len(refPoint) == 2:  # when two points were found
+        roi = oriImage[refPoint[0][1]:refPoint[1][1], refPoint[0][0]:refPoint[1][0]]
+
+    #cv.imshow("Blob Template", roi)
+
+    Blobs = CategorizeFeatures(roi)
+
+    BlobSizes = []
+
+    for i in range(len(Blobs)):
+        BlobSizes.append(Blobs[i][1])
+
+    BiggestBlob = max(BlobSizes)
+
+    for z in range(len(Blobs)):
+        if Blobs[z][1] == BiggestBlob:
+            template_features = Blobs[z]
+
+    return template_features
