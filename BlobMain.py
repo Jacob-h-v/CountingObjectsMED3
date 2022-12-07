@@ -11,6 +11,7 @@ from BinaryThreshold import BinaryThreshold, BitsuThreshold
 from grassfire import grassfire
 from BlobClassification import RemoveEdgeBlobs, CategorizeFeatures, DefineTemplateFeatures
 from DrawBoxes import DrawBlobBox
+from BlobMatcher import FilterBlobs
 
 currentImageName = "2P-2L-1P-1CL-3C-16A (1).JPEG"
 currentDirectory = "Puzzle/GreenBackground"
@@ -171,11 +172,12 @@ if matchTemplates & createTemplate & tempCoords:
     tempImage = cv.putText(tempImage, F"{templateMatching_count}", (15, 65), 1, 4, (0, 0, 255), 5, cv.LINE_AA)
 
 if displayBlobMatches:
-    blobBoxes = DrawBlobBox(imageInput, Blobs, gaussian_radius)
+    blobsFiltered = FilterBlobs(template_features, Blobs)
+    blobBoxes = DrawBlobBox(imageInput, blobsFiltered, gaussian_radius)
     tempImage = cv.cvtColor(tempImage, cv.COLOR_GRAY2RGB)
-    blobBoxesGrassfire = DrawBlobBox(tempImage, Blobs, 0)
-    tempImage = cv.putText(tempImage, F"{len(Blobs)}", (15, 65), 1, 4, (0, 0, 255), 5, cv.LINE_AA)
-    rgbBlobs = cv.putText(imageInput, F"{len(Blobs)}", (15, 65), 1, 4, (0, 0, 255), 5, cv.LINE_AA)
+    blobBoxesGrassfire = DrawBlobBox(tempImage, blobsFiltered, 0)
+    tempImage = cv.putText(tempImage, F"{len(blobsFiltered)}", (15, 65), 1, 4, (0, 0, 255), 5, cv.LINE_AA)
+    rgbBlobs = cv.putText(imageInput, F"{len(blobsFiltered)}", (15, 65), 1, 4, (0, 0, 255), 5, cv.LINE_AA)
 
 # Display images generated along the way
 if convolve_with_gaussian:
