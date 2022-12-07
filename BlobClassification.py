@@ -62,12 +62,15 @@ def DefineTemplateFeatures(input_image, template_coordinates, kernel_size):
 
     Blobs = CategorizeFeatures(roi)
 
-    BlobSizes = []
+    BlobSizes = [0]
+    template_features = [0, 0]
 
     for i in range(len(Blobs)):
         BlobSizes.append(Blobs[i][1])
 
     BiggestBlob = max(BlobSizes)
+    if BiggestBlob < 1:
+        print("BiggestBlob not found")
 
     for z in range(len(Blobs)):
         if Blobs[z][1] == BiggestBlob:

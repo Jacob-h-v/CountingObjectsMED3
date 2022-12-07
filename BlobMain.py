@@ -13,8 +13,8 @@ from BlobClassification import RemoveEdgeBlobs, CategorizeFeatures, DefineTempla
 from DrawBoxes import DrawBlobBox
 from BlobMatcher import FilterBlobs
 
-currentImageName = "2P-2L-1P-1CL-3C-16A (1).JPEG"
-currentDirectory = "Puzzle/GreenBackground"
+currentImageName = "3L-2L-1P-1CL-1C-12A (1).jpg"
+currentDirectory = "Lego/NormalBackground"
 imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}")
 imageInput = np.array(imageInput, dtype=np.uint8)
 tempImage = imageInput
