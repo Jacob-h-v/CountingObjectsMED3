@@ -10,6 +10,7 @@ from PointProcessing import IncreaseContrast
 from BinaryThreshold import BinaryThreshold, BitsuThreshold
 from grassfire import grassfire
 from BlobClassification import RemoveEdgeBlobs, CategorizeFeatures
+from DrawBoxes import DrawBlobBox
 
 currentImageName = "2P-2L-1P-1CL-3C-16A (1).JPEG"
 currentDirectory = "Puzzle/GreenBackground"
@@ -37,21 +38,22 @@ testing = False  # This will write the output image, closed image and template t
 # Don't forget to rename the outputs in the bottom of the script, if testing is enabled.
 # -------------------------------
 # What to display after the program runs
-displayMatchingResult = True
-displayClosing = True
+displayMatchingResult = False
+displayBlobMatches = True
+displayClosing = False
 displayTemplate = True
-displayBinaryThresh = True
+displayBinaryThresh = False
 displayBlurred = False
-displaySubtracted = True
+displaySubtracted = False
 displayContrast = False
-displayGrassfire = True
+displayGrassfire = False
 # -------------------------------
 # Warning: Modifying these can crash the program
 tempCoords = True
 adjustImgSize = True
 subtractBlurred = True
 createTemplate = True
-matchTemplates = True
+matchTemplates = False
 # -------------------------------
 
 if resize:
@@ -147,6 +149,7 @@ if grassfired:
     print("Categorizing Blobs...")
     Blobs = CategorizeFeatures(tempImage)
     print(Blobs)
+    # blobBoxesGrassfire = DrawBlobBox(tempImage, Blobs, gaussian_radius)
 
 # Crop out the selected template using coordinates
 if createTemplate & tempCoords:
@@ -162,6 +165,13 @@ if matchTemplates & createTemplate & tempCoords:
     # templateMatching_result = tempImage
     print("Generating image text...")
     tempImage = cv.putText(tempImage, F"{templateMatching_count}", (15, 65), 1, 4, (0, 0, 255), 5, cv.LINE_AA)
+
+if displayBlobMatches:
+    blobBoxes = DrawBlobBox(imageInput, Blobs, gaussian_radius)
+    tempImage = cv.cvtColor(tempImage, cv.COLOR_GRAY2RGB)
+    blobBoxesGrassfire = DrawBlobBox(tempImage, Blobs, 0)
+    tempImage = cv.putText(tempImage, F"{len(Blobs)}", (15, 65), 1, 4, (0, 0, 255), 5, cv.LINE_AA)
+    rgbBlobs = cv.putText(imageInput, F"{len(Blobs)}", (15, 65), 1, 4, (0, 0, 255), 5, cv.LINE_AA)
 
 # Display images generated along the way
 if convolve_with_gaussian:
@@ -182,11 +192,16 @@ if createTemplate & tempCoords & displayTemplate:
 if createTemplate & matchTemplates & tempCoords & displayMatchingResult:
     cv.imshow("template matching", tempImage)
 
+if displayBlobMatches:
+    cv.imshow("blob matches", tempImage)
+    cv.imshow("rgbBlobs", rgbBlobs)
+
 if closing & displayClosing:
     cv.imshow("Morphology", image_closed)
 
 if grassfired & displayGrassfire:
     cv.imshow("Grassfire", image_grassfire)
+
 
 if testing:
     cv.imwrite(F'Output/Test2/{currentDirectory}/{currentImageName}_result.png', tempImage)
