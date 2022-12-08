@@ -12,15 +12,16 @@ from grassfire import grassfire
 from BlobClassification import RemoveEdgeBlobs, CategorizeFeatures, DefineTemplateFeatures
 from DrawBoxes import DrawBlobBox
 from BlobMatcher import FilterBlobs
+from NoiseReductionNonRGB import convolve2D, generate_gaussian_kernel2D
 
-currentImageName = "3L-2L-1P-1CL-1C-12A (1).jpg"
-currentDirectory = "Lego/NormalBackground"
+currentImageName = "1M-3L-1P-1CL-1C-16A (1).JPEG"
+currentDirectory = "Coins/GreenBackground"
 imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}")
 imageInput = np.array(imageInput, dtype=np.uint8)
 tempImage = imageInput
 
 # Settings
-gaussian_radius = 20
+gaussian_radius = 50
 newGauss = True
 closing_kernel = 5
 structuring_element_erosion = 3
@@ -43,9 +44,9 @@ displayMatchingResult = False
 displayBlobMatches = True
 displayClosing = False
 displayTemplate = True
-displayBinaryThresh = False
+displayBinaryThresh = True
 displayBlurred = False
-displaySubtracted = False
+displaySubtracted = True
 displayContrast = False
 displayGrassfire = False
 # -------------------------------
@@ -82,6 +83,30 @@ if medianFilter:
     tempImage = median_filter(tempImage, 3)
     # median_filtered_img = tempImage
 
+# experimental
+if convolve_with_gaussian:
+    if newGauss:
+        print("Generating new gaussian kernel...")
+        gaussian_kernel = generate_gaussian_kernel(gaussian_radius, 10)
+        file = open("savedGauss", "wb")
+        np.save(file, gaussian_kernel)
+        file.close
+    print("Applying gaussian filter 2D...")
+    file = open("savedGauss", "rb")
+    savedGauss = np.load(file)
+    # print(savedGauss)
+    image_blurred = convolve2D(tempImage, savedGauss)
+    if adjustImgSize:
+        image_resize = tempImage[gaussian_radius:tempImage.shape[0]-gaussian_radius, gaussian_radius:tempImage.shape[1]-gaussian_radius]
+        print("Subtracting blurred image from original...")
+        if subtractBlurred:
+            tempImage = cv.subtract(image_resize, image_blurred)
+            image_subtracted = tempImage
+
+if applyContrast:
+    tempImage = IncreaseContrast(tempImage, contrast_multiplier)
+    contrasted = tempImage
+
 # Convolve with gaussian happens here
 if convolve_with_gaussian:
     if newGauss:
@@ -102,9 +127,6 @@ if convolve_with_gaussian:
             tempImage = cv.subtract(image_resize, image_blurred)
             image_subtracted = tempImage
 
-if applyContrast:
-    tempImage = IncreaseContrast(tempImage, contrast_multiplier)
-    contrasted = tempImage
 
 # Binary thresholding happens here
 if binaryThresh:
@@ -152,20 +174,20 @@ if grassfired:
     print(f"All Blobs: {Blobs}")
 
     print("Finding Template Features...")
-    template_features = DefineTemplateFeatures(tempImage, template_coords, gaussian_radius)
+    template_features = DefineTemplateFeatures(tempImage, template_coords, (2 * gaussian_radius))
     print(f"Template Blob: {template_features}")
     # blobBoxesGrassfire = DrawBlobBox(tempImage, Blobs, gaussian_radius)
 
 # Crop out the selected template using coordinates
 if createTemplate & tempCoords:
     print("Cropping template...")
-    template = crop(tempImage, template_coords[0] - gaussian_radius, template_coords[1] - gaussian_radius, template_coords[2] - gaussian_radius, template_coords[3] - gaussian_radius)
+    template = crop(tempImage, template_coords[0] - (2 * gaussian_radius), template_coords[1] - (2 * gaussian_radius), template_coords[2] - (2 * gaussian_radius), template_coords[3] - gaussian_radius)
 
 
 # Match template against processed image
 if matchTemplates & createTemplate & tempCoords:
     print("Running template matching...")
-    tempImage, templateMatching_count = TemplateMatching(imageInput, tempImage, template, gaussian_radius)
+    tempImage, templateMatching_count = TemplateMatching(imageInput, tempImage, template, (2 * gaussian_radius))
     # tempImage, templateMatching_count = ManualTemplateMatching(imageInput, tempImage, template, gaussian_radius)
     # templateMatching_result = tempImage
     print("Generating image text...")
@@ -173,7 +195,7 @@ if matchTemplates & createTemplate & tempCoords:
 
 if displayBlobMatches:
     blobsFiltered = FilterBlobs(template_features, Blobs)
-    blobBoxes = DrawBlobBox(imageInput, blobsFiltered, gaussian_radius)
+    blobBoxes = DrawBlobBox(imageInput, blobsFiltered, (2 * gaussian_radius))
     tempImage = cv.cvtColor(tempImage, cv.COLOR_GRAY2RGB)
     blobBoxesGrassfire = DrawBlobBox(tempImage, blobsFiltered, 0)
     tempImage = cv.putText(tempImage, F"{len(blobsFiltered)}", (15, 65), 1, 4, (0, 0, 255), 5, cv.LINE_AA)
