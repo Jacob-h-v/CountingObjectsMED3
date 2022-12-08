@@ -14,14 +14,14 @@ from DrawBoxes import DrawBlobBox
 from BlobMatcher import FilterBlobs
 from NoiseReductionNonRGB import convolve2D, generate_gaussian_kernel2D
 
-currentImageName = "1M-3L-1P-1CL-1C-16A (1).JPEG"
-currentDirectory = "Coins/GreenBackground"
+currentImageName = "IMG_0404.JPEG"
+currentDirectory = "Mixed/GreenBackground"
 imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}")
 imageInput = np.array(imageInput, dtype=np.uint8)
 tempImage = imageInput
 
 # Settings
-gaussian_radius = 50
+gaussian_radius = 30
 newGauss = True
 closing_kernel = 5
 structuring_element_erosion = 3
@@ -132,9 +132,6 @@ if convolve_with_gaussian:
 if binaryThresh:
     print("Applying binary thresholding...")
     tempImage = cv.cvtColor(tempImage, cv.COLOR_BGR2GRAY)
-    cv.imshow("grey", tempImage)
-    #tempImage = cv.adaptiveThreshold(tempImage, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 251, 2)
-    #ret, tempImage = cv.threshold(tempImage, 25, 255, cv.THRESH_BINARY)
     biThresh = BitsuThreshold(tempImage)
     print(f"Bitsu Threshold: {biThresh}")
     tempImage = BinaryThreshold(tempImage, biThresh)
@@ -181,7 +178,7 @@ if grassfired:
 # Crop out the selected template using coordinates
 if createTemplate & tempCoords:
     print("Cropping template...")
-    template = crop(tempImage, template_coords[0] - (2 * gaussian_radius), template_coords[1] - (2 * gaussian_radius), template_coords[2] - (2 * gaussian_radius), template_coords[3] - gaussian_radius)
+    template = crop(tempImage, template_coords[0] - (2 * gaussian_radius), template_coords[1] - (2 * gaussian_radius), template_coords[2] - (2 * gaussian_radius), template_coords[3] - (2 * gaussian_radius))
 
 
 # Match template against processed image
