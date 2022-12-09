@@ -24,7 +24,7 @@ def FilterBlobs(template_features, blobs):
         # Box Clasifier
         if (templateSize * 0.15) < blobSize < (templateSize * 1.85):
             if (templateBoxRatio * 0.7) < blobBoxRatio < (templateBoxRatio * 1.3):
-                if (templateCircularity * 0.75) < circularity < (templateCircularity * 1.25):
-                    blobbestOfBlobs.append(blob)
+                #if (templateCircularity * 0.75) < circularity < (templateCircularity * 1.25):
+                blobbestOfBlobs.append(blob)
 
     return blobbestOfBlobs
