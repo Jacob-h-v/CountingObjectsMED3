@@ -14,8 +14,8 @@ from DrawBoxes import DrawBlobBox
 from BlobMatcher import FilterBlobs
 from NoiseReductionNonRGB import convolve2D, generate_gaussian_kernel2D
 
-currentImageName = "IMG_0404.JPEG"
-currentDirectory = "Mixed/GreenBackground"
+currentImageName = "1M-2L-1P-1CL-1C-16A (1).JPEG"
+currentDirectory = "Coins/GreenBackground"
 imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}")
 imageInput = np.array(imageInput, dtype=np.uint8)
 tempImage = imageInput
