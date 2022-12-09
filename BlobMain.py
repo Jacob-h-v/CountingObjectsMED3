@@ -14,14 +14,14 @@ from DrawBoxes import DrawBlobBox
 from BlobMatcher import FilterBlobs
 from NoiseReductionNonRGB import convolve2D, generate_gaussian_kernel2D
 
-currentImageName = "1M-2L-1P-1CL-1C-16A (1).JPEG"
-currentDirectory = "Coins/GreenBackground"
+currentImageName = "3L-1L-1P-1CL-2C-16A (1).JPEG"
+currentDirectory = "Lego/GreenBackground"
 imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}")
 imageInput = np.array(imageInput, dtype=np.uint8)
 tempImage = imageInput
 
 # Settings
-gaussian_radius = 30
+gaussian_radius = 20
 newGauss = True
 closing_kernel = 5
 structuring_element_erosion = 3
@@ -36,7 +36,7 @@ applyContrast = True
 binaryThresh = True
 closing = True
 grassfired = True
-testing = False  # This will write the output image, closed image and template to files in the "Output" folder.
+testing = True  # This will write the output image, closed image and template to files in the "Output" folder.
 # Don't forget to rename the outputs in the bottom of the script, if testing is enabled.
 # -------------------------------
 # What to display after the program runs
@@ -44,11 +44,12 @@ displayMatchingResult = False
 displayBlobMatches = True
 displayClosing = False
 displayTemplate = True
-displayBinaryThresh = True
+displayBinaryThresh = False
 displayBlurred = False
-displaySubtracted = True
+displaySubtracted = False
 displayContrast = False
 displayGrassfire = False
+displayBlobFinal = True
 # -------------------------------
 # Warning: Modifying these can crash the program
 tempCoords = True
@@ -222,7 +223,7 @@ if createTemplate & matchTemplates & tempCoords & displayMatchingResult:
     cv.imshow("template matching", tempImage)
 
 if displayBlobMatches:
-    cv.imshow("blob matches", tempImage)
+    # cv.imshow("blob matches", tempImage)
     cv.imshow("rgbBlobs", rgbBlobs)
 
 if closing & displayClosing:
@@ -231,10 +232,12 @@ if closing & displayClosing:
 if grassfired & displayGrassfire:
     cv.imshow("Grassfire", image_grassfire)
 
+if displayBlobFinal:
+    cv.imshow("FinalBlob", image_edgeblobs)
 
 if testing:
-    cv.imwrite(F'Output/Test2/{currentDirectory}/{currentImageName}_result.png', tempImage)
-    cv.imwrite(F'Output/Test2/{currentDirectory}/{currentImageName}_final.png', contrasted)
-    cv.imwrite(F'Output/Test2/{currentDirectory}/{currentImageName}_template.png', template)
+    cv.imwrite(F'Output/Test3/{currentDirectory}/{currentImageName}_result.png', rgbBlobs)
+    cv.imwrite(F'Output/Test3/{currentDirectory}/{currentImageName}_final.png', image_edgeblobs)
+    cv.imwrite(F'Output/Test3/{currentDirectory}/{currentImageName}_template.png', template)
 
 cv.waitKey(0)

@@ -18,7 +18,7 @@ def RemoveEdgeBlobs(grassfire_image):
 def FindPerimeter(blob_image):
     eroded_image = inbuiltMorphology(blob_image, 3, OpType.Erosion)
     edge_image = cv.subtract(blob_image, eroded_image)
-    cv.imshow("Edges", edge_image)
+    # cv.imshow("Edges", edge_image)
 
     PreviousIDs = []
     Perimeters = []
