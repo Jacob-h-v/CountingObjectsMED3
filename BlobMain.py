@@ -9,7 +9,7 @@ from testie import ManualTemplateMatching
 from PointProcessing import IncreaseContrast
 from BinaryThreshold import BinaryThreshold, BitsuThreshold
 from grassfire import grassfire
-from BlobClassification import RemoveEdgeBlobs, CategorizeFeatures, DefineTemplateFeatures
+from BlobClassification import RemoveEdgeBlobs, CategorizeFeatures, DefineTemplateFeatures, FindPerimeter
 from DrawBoxes import DrawBlobBox
 from BlobMatcher import FilterBlobs
 from NoiseReductionNonRGB import convolve2D, generate_gaussian_kernel2D
@@ -173,6 +173,10 @@ if grassfired:
     print("Finding Template Features...")
     template_features = DefineTemplateFeatures(tempImage, template_coords, (2 * gaussian_radius))
     print(f"Template Blob: {template_features}")
+
+    print("Finding Perimeter...")
+    Perimeters = FindPerimeter(tempImage)
+    print(f"Perimeters: {Perimeters}")
     # blobBoxesGrassfire = DrawBlobBox(tempImage, Blobs, gaussian_radius)
 
 # Crop out the selected template using coordinates

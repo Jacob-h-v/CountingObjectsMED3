@@ -1,5 +1,6 @@
 import cv2 as cv
 import numpy as np
+from Morphology import inbuiltMorphology, OpType
 
 def RemoveEdgeBlobs(grassfire_image):
     for y in range(grassfire_image.shape[0]):
@@ -14,10 +15,37 @@ def RemoveEdgeBlobs(grassfire_image):
 
     return grassfire_image
 
+def FindPerimeter(blob_image):
+    eroded_image = inbuiltMorphology(blob_image, 5, OpType.Erosion)
+    edge_image = cv.subtract(blob_image, eroded_image)
+    cv.imshow("Edges", edge_image)
+
+    PreviousIDs = []
+    Perimeters = []
+
+    for y in range(edge_image.shape[0]):
+        for x in range(edge_image.shape[1]):
+            if edge_image[y, x] != 0:
+                if PreviousIDs.count(edge_image[y, x]) == 0:
+
+                    currentID = edge_image[y, x]
+                    PreviousIDs.append(currentID)
+
+                    blobSize = 0
+                    for z in range(edge_image.shape[0]):
+                        for i in range(edge_image.shape[1]):
+                            if edge_image[z, i] == currentID:
+                                blobSize = blobSize + 1
+
+                    Perimeters.append(blobSize)
+
+    return Perimeters
+
 def CategorizeFeatures(input_image):
     blobID = 0
     Blobs = []
     PreviousIDs = []
+    Perimeters = FindPerimeter(input_image)
 
     for y in range(input_image.shape[0]):
         for x in range(input_image.shape[1]):
@@ -47,7 +75,7 @@ def CategorizeFeatures(input_image):
 
                     Boundingbox = [xMin, yMin, xMax, yMax]
                     PreviousIDs.append(currentID)
-                    Blob = [currentID, blobSize, Boundingbox]
+                    Blob = [currentID, blobSize, Boundingbox, Perimeters[blobID-1]]
                     Blobs.append(Blob)
 
     return Blobs
