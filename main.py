@@ -29,7 +29,7 @@ convolve_with_gaussian = True
 applyContrast = True
 binaryThresh = False
 closing = False
-testing = True  # This will write the output image, closed image and template to files in the "Output" folder.
+testing = False  # This will write the output image, closed image and template to files in the "Output" folder.
 # Don't forget to rename the outputs in the bottom of the script, if testing is enabled.
 # -------------------------------
 # What to display after the program runs
