@@ -1,9 +1,7 @@
 # Implementing a median filter to reduce noise. Specifically salt/pepper noise and spiky pixel values..
 
-import cv2 as cv
 import numpy as np
 import math
-from PIL import Image
 
 
 def median_filter2D(data, kernel):
@@ -27,11 +25,6 @@ def median_filter2D(data, kernel):
             )[index]
             return data
     return data
-
-# slice = data[ i - filter_size : i + filter_size]
-
-# slice = slice.flatten
-
 
 # Gaussian filter code from lecture 4
 def convolve2D(image, kernel):

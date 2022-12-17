@@ -1,6 +1,5 @@
 import numpy as np
 
-# np.seterr(divide='ignore', invalid='ignore')
 #  Felzenszwalb et al.
 
 def non_max_suppression(boxes, overlapThresh):

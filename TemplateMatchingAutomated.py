@@ -33,8 +33,6 @@ def TemplateMatching(image, processed, template, kernelsize):
 
         for (x, y) in zip(xCoords, yCoords):
             rects.append((x, y, x + tW, y + tH))
-        # print(f"Iteration: {i}: {xCoords}, {yCoords}")
-        # cv.imshow(f"res{i}", res)
 
     pick = non_max_suppression(np.array(rects), 0.05)
     resultAmount = len(pick)
@@ -47,7 +45,3 @@ def TemplateMatching(image, processed, template, kernelsize):
                       (0, 0, 255), 3)
     # show the output image
     return image, resultAmount
-    #cv.imshow("Result", image)
-    #cv.waitKey(0)
-
-# TemplateMatching(inputPic, templateTest)

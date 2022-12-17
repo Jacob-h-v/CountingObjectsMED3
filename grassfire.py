@@ -1,6 +1,4 @@
 from collections import deque
-import numpy as np
-import cv2 as cv
 
 def ignite_pixel(image, coordinate, id):
     y, x = coordinate

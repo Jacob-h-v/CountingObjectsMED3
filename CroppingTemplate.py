@@ -1,6 +1,4 @@
 import cv2 as cv
-import numpy as np
-import math
 
 cropping = False
 showCropping = True
@@ -73,13 +71,3 @@ def combinedCrop(image):
     template = crop(image, tempCoords[0], tempCoords[1], tempCoords[2], tempCoords[3])
 
     return template
-
-#croppedPic = template_cropping(image)
-#print(croppedPic)
-
-#cropped = crop(image, croppedPic[0], croppedPic[1], croppedPic[2], croppedPic[3])
-
-#cv.imshow("crop", cropped)
-#cv.waitKey(0)
-
-# cv.imshow("result", croppedPic)

@@ -5,17 +5,17 @@ from CroppingTemplate import template_cropping, crop
 from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
-from testie import ManualTemplateMatching
+from TemplateMatchingHandwritten import ManualTemplateMatching
 from PointProcessing import IncreaseContrast
-from BinaryThreshold import BinaryThreshold, BitsuThreshold
+from BinaryThreshold import BinaryThreshold, OtsuThreshold
 from grassfire import grassfire
 from BlobClassification import RemoveEdgeBlobs, CategorizeFeatures, DefineTemplateFeatures, FindPerimeter
 from DrawBoxes import DrawBlobBox
 from BlobMatcher import FilterBlobs
 from NoiseReductionNonRGB import convolve2D, generate_gaussian_kernel2D
 
-currentImageName = "3L-1L-1P-1CL-2C-16A (1).JPEG"
-currentDirectory = "Lego/GreenBackground"
+currentImageName = "1M-2L-1P-1CL-1C_(1)(1).jpg"
+currentDirectory = "Coins/NormalBackground"
 imageInput = cv.imread(F"Resources/JPEGbilleder/{currentDirectory}/{currentImageName}")
 imageInput = np.array(imageInput, dtype=np.uint8)
 tempImage = imageInput
@@ -102,6 +102,7 @@ if convolve_with_gaussian:
             tempImage = cv.subtract(image_resize, image_blurred)
             image_subtracted = tempImage
 
+# Amplify color contrasts in the image
 if applyContrast:
     tempImage = IncreaseContrast(tempImage, contrast_multiplier)
     contrasted = tempImage
@@ -131,7 +132,7 @@ if convolve_with_gaussian:
 if binaryThresh:
     print("Applying binary thresholding...")
     tempImage = cv.cvtColor(tempImage, cv.COLOR_BGR2GRAY)
-    biThresh = BitsuThreshold(tempImage)
+    biThresh = OtsuThreshold(tempImage)
     print(f"Bitsu Threshold: {biThresh}")
     tempImage = BinaryThreshold(tempImage, biThresh)
     image_binary = tempImage
@@ -152,6 +153,7 @@ if closing:
     # tempImage = Closing(image_binary, structuring_element_erosion, structuring_element_dilation)
     image_closed = tempImage
 
+# Identify BLOBs using a grassfire algorithm and remove edge BLOBs
 if grassfired:
     print("Running grassfire algorithm...")
     grassfire(tempImage)
@@ -187,6 +189,7 @@ if matchTemplates & createTemplate & tempCoords:
     print("Generating image text...")
     tempImage = cv.putText(tempImage, F"{templateMatching_count}", (15, 65), 1, 4, (0, 0, 255), 5, cv.LINE_AA)
 
+# Presents the output in a human-readable format for the user
 if displayBlobMatches:
     blobsFiltered = FilterBlobs(template_features, Blobs)
     blobBoxes = DrawBlobBox(imageInput, blobsFiltered, (2 * gaussian_radius))
@@ -215,7 +218,6 @@ if createTemplate & matchTemplates & tempCoords & displayMatchingResult:
     cv.imshow("template matching", tempImage)
 
 if displayBlobMatches:
-    # cv.imshow("blob matches", tempImage)
     cv.imshow("rgbBlobs", rgbBlobs)
 
 if closing & displayClosing:
