@@ -7,7 +7,7 @@ from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
 from testie import ManualTemplateMatching
 from PointProcessing import IncreaseContrast
-from BinaryThreshold import BinaryThreshold, BitsuThreshold
+from BinaryThreshold import BinaryThreshold, OtsuThreshold
 from grassfire import grassfire
 from BlobClassification import RemoveEdgeBlobs, CategorizeFeatures, DefineTemplateFeatures, FindPerimeter
 from DrawBoxes import DrawBlobBox
@@ -133,8 +133,8 @@ if convolve_with_gaussian:
 if binaryThresh:
     print("Applying binary thresholding...")
     tempImage = cv.cvtColor(tempImage, cv.COLOR_BGR2GRAY)
-    biThresh = BitsuThreshold(tempImage)
-    print(f"Bitsu Threshold: {biThresh}")
+    biThresh = OtsuThreshold(tempImage)
+    print(f"Otsu Threshold: {biThresh}")
     tempImage = BinaryThreshold(tempImage, biThresh)
     image_binary = tempImage
 

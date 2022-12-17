@@ -13,7 +13,7 @@ def BinaryThreshold(input_image, threshold):
 
     return output_image
 
-def BitsuThreshold(image_input):
+def OtsuThreshold(image_input):
     # find normalized_histogram, and its cumulative distribution function
     hist = cv.calcHist([image_input], [0], None, [256], [0, 256])
     hist_norm = hist.ravel() / hist.sum()
