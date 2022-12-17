@@ -7,7 +7,7 @@ from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
 from testie import ManualTemplateMatching
 from PointProcessing import IncreaseContrast
-from BinaryThreshold import BinaryThreshold, OtsuThreshold
+from BinaryThreshold import BinaryThreshold, BitsuThreshold
 from grassfire import grassfire
 from BlobClassification import RemoveEdgeBlobs, CategorizeFeatures, DefineTemplateFeatures, FindPerimeter
 from DrawBoxes import DrawBlobBox
@@ -36,7 +36,7 @@ applyContrast = True
 binaryThresh = True
 closing = True
 grassfired = True
-testing = False  # This will write the output image, closed image and template to files in the "Output" folder.
+testing = True  # This will write the output image, closed image and template to files in the "Output" folder.
 # Don't forget to rename the outputs in the bottom of the script, if testing is enabled.
 # -------------------------------
 # What to display after the program runs
@@ -73,8 +73,6 @@ if tempCoords:
     print("Generating template coordinates...")
     template_coords = template_cropping(tempImage)
 
-# tempImage_gray = cv.cvtColor(tempImage, cv.COLOR_BGR2GRAY)
-# tempImage_hsv = cv.cvtColor(tempImage, cv.COLOR_BGR2HSV)
 tempImage = np.array(tempImage, dtype=np.uint8)
 
 # Run median filter
@@ -84,7 +82,7 @@ if medianFilter:
     tempImage = median_filter(tempImage, 3)
     # median_filtered_img = tempImage
 
-# experimental
+# Smoothing out lighting
 if convolve_with_gaussian:
     if newGauss:
         print("Generating new gaussian kernel...")
@@ -108,7 +106,7 @@ if applyContrast:
     tempImage = IncreaseContrast(tempImage, contrast_multiplier)
     contrasted = tempImage
 
-# Convolve with gaussian happens here
+# Convolve with gaussian happens here (to remove colors in background)
 if convolve_with_gaussian:
     if newGauss:
         print("Generating new gaussian kernel...")
@@ -133,8 +131,8 @@ if convolve_with_gaussian:
 if binaryThresh:
     print("Applying binary thresholding...")
     tempImage = cv.cvtColor(tempImage, cv.COLOR_BGR2GRAY)
-    biThresh = OtsuThreshold(tempImage)
-    print(f"Otsu Threshold: {biThresh}")
+    biThresh = BitsuThreshold(tempImage)
+    print(f"Bitsu Threshold: {biThresh}")
     tempImage = BinaryThreshold(tempImage, biThresh)
     image_binary = tempImage
 
@@ -142,9 +140,6 @@ if binaryThresh:
 # Run closing operation
 if closing:
     print("Running morphology operation...")
-    # tempImage = morphology(tempImage, 5, OpType.Erosion)
-
-    #tempImage = inbuiltMorphology(tempImage, 3, OpType.Erosion)
 
     # Closing
     tempImage = inbuiltMorphology(tempImage, 7, OpType.Dilation)
@@ -178,7 +173,6 @@ if grassfired:
     print("Finding Perimeter...")
     Perimeters = FindPerimeter(tempImage)
     print(f"Perimeters: {Perimeters}")
-    # blobBoxesGrassfire = DrawBlobBox(tempImage, Blobs, gaussian_radius)
 
 # Crop out the selected template using coordinates
 if createTemplate & tempCoords:
@@ -190,8 +184,6 @@ if createTemplate & tempCoords:
 if matchTemplates & createTemplate & tempCoords:
     print("Running template matching...")
     tempImage, templateMatching_count = TemplateMatching(imageInput, tempImage, template, (2 * gaussian_radius))
-    # tempImage, templateMatching_count = ManualTemplateMatching(imageInput, tempImage, template, gaussian_radius)
-    # templateMatching_result = tempImage
     print("Generating image text...")
     tempImage = cv.putText(tempImage, F"{templateMatching_count}", (15, 65), 1, 4, (0, 0, 255), 5, cv.LINE_AA)
 

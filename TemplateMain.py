@@ -5,7 +5,7 @@ from CroppingTemplate import template_cropping, crop
 from TemplateMatchingAutomated import TemplateMatching
 from NoiseReduction import median_filter, convolve, generate_gaussian_kernel
 from Morphology import inbuiltMorphology, OpType, morphology, Closing
-from testie import ManualTemplateMatching
+from TemplateMatchingHandwritten import ManualTemplateMatching
 from PointProcessing import IncreaseContrast
 
 currentImageName = "3L-3L-2P-3CL-2C-20A (1).JPEG"
@@ -63,8 +63,7 @@ if tempCoords:
     print("Generating template coordinates...")
     template_coords = template_cropping(tempImage)
 
-# tempImage_gray = cv.cvtColor(tempImage, cv.COLOR_BGR2GRAY)
-# tempImage_hsv = cv.cvtColor(tempImage, cv.COLOR_BGR2HSV)
+
 tempImage = np.array(tempImage, dtype=np.uint8)
 
 # Run median filter
@@ -109,7 +108,6 @@ if binaryThresh:
 if closing:
     print("Running closing operation...")
     tempImage = inbuiltMorphology(tempImage, closing_kernel, OpType.Closing)
-    # tempImage = Closing(image_binary, structuring_element_erosion, structuring_element_dilation)
     image_closed = tempImage
 
 
@@ -123,8 +121,6 @@ if createTemplate & tempCoords:
 if matchTemplates & createTemplate & tempCoords:
     print("Running template matching...")
     tempImage, templateMatching_count = TemplateMatching(imageInput, tempImage, template, gaussian_radius)
-    # tempImage, templateMatching_count = ManualTemplateMatching(imageInput, tempImage, template, gaussian_radius)
-    # templateMatching_result = tempImage
 
 print("Generating image text...")
 tempImage = cv.putText(tempImage, F"{templateMatching_count}", (15, 65), 1, 4, (0, 0, 255), 5, cv.LINE_AA)

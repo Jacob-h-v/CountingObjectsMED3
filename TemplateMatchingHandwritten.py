@@ -4,10 +4,6 @@ import numpy as np
 from NonMaximaSupressionTest import non_max_suppression
 
 def NormalisedCrossCorrelation(roi, target):
-    # Normalised Cross Correlation Equation
-    # cor=np.sum(roi*target)
-    # nor = np.sqrt((np.sum(roi**2)))*np.sqrt(np.sum(target**2))
-    #return cor / nor
     print(f"Initiating NCC on roi: {roi}")
     ncc = np.zeros((roi.shape[0], roi.shape[1], roi.shape[2]), dtype=np.uint8)
 
@@ -16,7 +12,6 @@ def NormalisedCrossCorrelation(roi, target):
             for z in range(roi.shape[2]):
                 corr = (roi[y, x, z] - np.mean(roi)) * (target[y, x, z] - np.average(target))
                 norm = ((roi[y, x, z] - np.mean(roi)) * (roi[y, x, z] - np.mean(roi))) * ((target[y, x, z] - np.average(target)) * (target[y, x, z] - np.average(target)))
-                #ncc[y, x, z] = corr/norm
                 ncc = corr/norm
     # print(ncc)
     print(ncc)
@@ -26,7 +21,6 @@ def NormalisedCrossCorrelation(roi, target):
 def GetMatches(processed, temp):
     template_y = temp.shape[0]
     template_x = temp.shape[1]
-    # template_z = template.shape[2]
     output = np.zeros((processed.shape[0] - template_y + 1, processed.shape[1] - template_x + 1, processed.shape[2]),
                       dtype=np.uint8)
     matchList = np.zeros((processed.shape[0] - template_y + 1, processed.shape[1] - template_x + 1, processed.shape[2]),
@@ -43,7 +37,6 @@ def GetMatches(processed, temp):
                 # find the most match area
                 if output[y, x, z] > 0.4:
                     matchList[y, x, z] = output[y, x, z]
-                #matchList.append(output)
 
     return matchList
 
@@ -52,8 +45,6 @@ def ManualTemplateMatching(original, processed, template, kernelsize):
     image = np.array(original, dtype=np.uint8)
     processed = np.array(processed, dtype=np.uint8)
     template = np.array(template, dtype=np.uint8)
-    # if threshold == None:
-        # threshold = 0.40
 
     template_90 = cv.rotate(template, cv.ROTATE_90_CLOCKWISE)
     template_180 = cv.rotate(template_90, cv.ROTATE_90_CLOCKWISE)
@@ -81,7 +72,6 @@ def ManualTemplateMatching(original, processed, template, kernelsize):
 
         for (x, y) in zip(xCoords, yCoords):
             rects.append((x, y, x + tW, y + tH))
-        # print(f"Iteration: {i}: {xCoords}, {yCoords}")
     print("Initiating non maxima suppression...")
     pick = non_max_suppression(np.array(rects), 0.1)
     resultAmount = len(pick)
