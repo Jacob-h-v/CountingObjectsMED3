@@ -2,6 +2,9 @@ import numpy as np
 
 #  Felzenszwalb et al.
 
+# Takes a list of bounding boxes and returns a filtered list with no overlapping objects
+# Originally based on code from: https://pyimagesearch.com/2014/11/17/non-maximum-suppression-object-detection-python/
+
 def non_max_suppression(boxes, overlapThresh):
 	# if there are no boxes, return an empty list
 	if len(boxes) == 0:
